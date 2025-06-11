@@ -1,23 +1,37 @@
+// controllers/userControllers/profileController.js
 import User from '../../models/User.js';
 
-// GET Own Profile
-export const getOwnProfile = async (req, res) => {
-  res.status(200).json(req.user);
-};
-
-// PUT Update Profile
+// Update own profile
 export const updateProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const userId = req.user._id;
+    const updates = req.body;
 
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.phone = req.body.phone || user.phone;
-
-    const updatedUser = await user.save();
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true });
     res.status(200).json(updatedUser);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating profile', error: err.message });
+  }
+};
+
+// Admin deletes user by ID
+export const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting user', error: err.message });
+  }
+};
+
+// Admin sees all users
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password'); // hide passwords
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching users', error: err.message });
   }
 };

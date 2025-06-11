@@ -1,18 +1,22 @@
+// routes/userRoutes.js
 import express from 'express';
-import { protect } from '../middlewares/authMiddleware.js';
-import { authorizeRoles } from '../middlewares/roleMiddleware.js';
-import { getAllUsers, deleteUser } from '../controllers/userControllers/userController.js';
-import { getOwnProfile, updateProfile } from '../controllers/userControllers/profileController.js';
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 import roleMiddleware from '../middlewares/roleMiddleware.js';
+import {
+  updateProfile,
+  deleteUser,
+  getAllUsers
+} from '../controllers/userControllers/profileController.js';
 
 const router = express.Router();
 
+// Update own profile (authenticated users)
+router.put('/me', authMiddleware, updateProfile);
 
-router.get('/admin/users', protect, authorizeRoles('admin'), getAllUsers);
-router.delete('/admin/user/:id', protect, authorizeRoles('admin'), deleteUser);
-router.get('/profile', authMiddleware, getOwnProfile);
-router.put('/profile', authMiddleware, updateProfile);
+// Admin: View all users
 router.get('/', authMiddleware, roleMiddleware(['admin']), getAllUsers);
+
+// Admin: Delete user by ID
+router.delete('/:id', authMiddleware, roleMiddleware(['admin']), deleteUser);
 
 export default router;
