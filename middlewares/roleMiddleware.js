@@ -1,23 +1,17 @@
-
-export const authorizeRoles = (...allowedRoles) => {
+// Allow only specific roles (e.g., 'admin', 'user')
+export const restrictTo = (...allowedRoles) => {
   return (req, res, next) => {
-    if (!req.user || !req.user.role) {
-      return res.status(403).json({ message: 'Access denied. No role found.' });
-    }
-
     if (!allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ message: `Access denied for role: ${req.user.role}` });
+      return res.status(403).json({ message: 'Access denied: insufficient permissions' });
     }
+    next();
+  };
+};
 
-    next();
-  };
+// Shortcut: Only allow admins
+export const isAdmin = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Access denied: admin only' });
+  }
+  next();
 };
-const roleMiddleware = (roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Access denied' });
-    }
-    next();
-  };
-};
-export default roleMiddleware;

@@ -1,22 +1,35 @@
+// server.js
 import express from 'express';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import connectDB from './config/db.js';
-import authRoutes from './routes/authRoutes.js';
-import taskRoutes from './routes/taskRoutes.js';
-import userRoutes from './routes/userRoutes.js';
 import cors from 'cors';
+import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js'; 
+import workerRoutes from './routes/workerRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js'; 
 
-dotenv.config();
-connectDB();
 
 const app = express();
-
-app.use(cors());
+dotenv.config();
 app.use(express.json());
-
+app.use(cors());
+// Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/tasks', taskRoutes);
-app.use('/api', userRoutes); // Admin routes
+app.use('/api/users', userRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/workers', workerRoutes); // Only accessible by admin
+app.use('/api/categories', categoryRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Connect DB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('MongoDB Connected');
+  app.listen(process.env.PORT || 5000, () => {
+    console.log('Server running on port 5000');
+  });
+}).catch((err) => {
+  console.error('MongoDB connection error:', err.message);
+});
