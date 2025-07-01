@@ -1,8 +1,16 @@
 import Worker from '../models/worker.js';
 
 // GET /api/workers
+// export const getAllWorkers = async (req, res) => {
+//   const workers = await Worker.find();
+//   res.json(workers);
+// };
+
 export const getAllWorkers = async (req, res) => {
-  const workers = await Worker.find();
+  const { category } = req.query;
+
+  const filter = category ? { category } : {};
+  const workers = await Worker.find(filter);
   res.json(workers);
 };
 

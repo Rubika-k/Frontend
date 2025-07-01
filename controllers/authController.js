@@ -6,12 +6,10 @@ const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkeyUCtJokvXZwjks4xPyrEI
 
 // ========== SIGNUP ==========
 export const signup = async (req, res) => {
-  const { fullName, email, phone, password, confirmPassword, address, role } = req.body;
+  const { fullName, email, phone, password, address, role } = req.body;
 
   try {
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'Passwords do not match' });
-    }
+
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -53,26 +51,33 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    //  Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    //  Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    //  Create JWT token
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET,  
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
+    //  Send response INCLUDING role!
     res.status(200).json({
       message: `${user.role} login successful`,
-      token
+      token,
+      userId: user._id,
+      role: user.role 
     });
+
   } catch (err) {
     res.status(500).json({ message: 'Login failed', error: err.message });
   }

@@ -13,7 +13,7 @@ import { isAdmin } from '../middlewares/roleMiddleware.js';
 const router = express.Router();
 
 // User creates a booking
-router.post('/', verifyToken, createBooking);
+router.post('/', createBooking);
 
 // User gets their own bookings
 router.get('/user/:id', verifyToken, getUserBookings);

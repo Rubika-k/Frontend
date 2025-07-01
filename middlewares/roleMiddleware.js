@@ -1,3 +1,7 @@
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+
+const JWT_SECRET = process.env.JWT_SECRET
 // Allow only specific roles (e.g., 'admin', 'user')
 export const restrictTo = (...allowedRoles) => {
   return (req, res, next) => {
