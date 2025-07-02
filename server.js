@@ -20,7 +20,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/workers', workerRoutes); // Only accessible by admin
 app.use('/api/categories', categoryRoutes);
-
+app.use('/uploads', express.static('uploads')); // Serve static files from uploads directory
 // Connect DB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
