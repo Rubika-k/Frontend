@@ -46,20 +46,18 @@ export default function AdminServices() {
   };
 
   return (
-    <section className="bg-white rounded shadow p-6 relative">
+    <section className="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto mt-8 relative">
       {popup.show && (
         <div
-          className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded shadow-lg text-white ${
-            popup.type === 'success' ? 'bg-green-600' : 'bg-red-600'
-          }`}
+          className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded shadow-lg text-white ${popup.type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}
         >
           {popup.message}
         </div>
       )}
-      <h2 className="text-lg font-semibold mb-4">Service Categories</h2>
+      <h2 className="text-2xl font-bold text-blue-700 mb-6 tracking-tight">Service Categories</h2>
       <form
         onSubmit={handleAddCategory}
-        className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4"
+        className="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between bg-blue-50 p-4 rounded-lg shadow"
       >
         <input
           type="text"
@@ -67,57 +65,69 @@ export default function AdminServices() {
           placeholder="Category Name"
           value={newCategory.name}
           onChange={handleCategoryChange}
-          className="p-2 border rounded"
+          className="p-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full md:w-1/2"
           required
         />
         <input
           type="text"
           name="icon"
-          placeholder="Icon (optional)"
+          placeholder="Icon (emoji or url, optional)"
           value={newCategory.icon}
           onChange={handleCategoryChange}
-          className="p-2 border rounded"
+          className="p-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full md:w-1/3"
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition w-full md:w-40"
         >
           + Add
         </button>
       </form>
-      <table className="w-full text-sm border-collapse">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">Icon</th>
-            <th className="p-2">Name</th>
-            <th className="p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.length === 0 ? (
-            <tr>
-              <td colSpan={3} className="text-center p-4 text-gray-500">
-                No categories found.
-              </td>
+      <div className="overflow-x-auto rounded-lg shadow">
+        <table className="w-full text-sm border-collapse bg-white">
+          <thead>
+            <tr className="bg-blue-100 text-blue-900">
+              <th className="p-3 font-semibold">Icon</th>
+              <th className="p-3 font-semibold">Name</th>
+              <th className="p-3 font-semibold">Actions</th>
             </tr>
-          ) : (
-            categories.map((cat) => (
-              <tr key={cat._id} className="border-t">
-                <td className="p-2">{cat.icon || '—'}</td>
-                <td className="p-2">{cat.name}</td>
-                <td className="p-2">
-                  <button
-                    onClick={() => handleDeleteCategory(cat._id)}
-                    className="text-white bg-red-600 px-2 py-1 rounded hover:bg-red-700 transition"
-                  >
-                    Delete
-                  </button>
+          </thead>
+          <tbody>
+            {categories.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="text-center p-6 text-gray-400 font-medium bg-gray-50">
+                  No categories found.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              categories.map((cat) => (
+                <tr key={cat._id} className="border-b hover:bg-blue-50 transition">
+                  <td className="p-3 text-2xl text-center">
+                    {cat.icon ? (
+                      cat.icon.startsWith('http') ? (
+                        <img src={cat.icon} alt="icon" className="w-8 h-8 mx-auto" />
+                      ) : (
+                        <span>{cat.icon}</span>
+                      )
+                    ) : (
+                      <span className="text-gray-400">—</span>
+                    )}
+                  </td>
+                  <td className="p-3 font-medium">{cat.name}</td>
+                  <td className="p-3">
+                    <button
+                      onClick={() => handleDeleteCategory(cat._id)}
+                      className="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-semibold transition"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

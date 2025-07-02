@@ -12,7 +12,7 @@ export default function AdminUsers() {
   }, []);
 
   const fetchUsers = async () => {
-    const res = await axios.get('/api/customers', {
+    const res = await axios.get('/api/users', {
       headers: { Authorization: `Bearer ${adminToken}` },
     });
     setUsers(res.data || []); // Accepts array directly from backend
@@ -20,7 +20,7 @@ export default function AdminUsers() {
 
   const handleDeleteUser = async (id) => {
     if (!window.confirm('Delete this user?')) return;
-    await axios.delete(`/api/customers/${id}`, {
+    await axios.delete(`/api/users/${id}`, {
       headers: { Authorization: `Bearer ${adminToken}` },
     });
     fetchUsers();
@@ -31,52 +31,65 @@ export default function AdminUsers() {
   );
 
   return (
-    <section className="bg-white rounded shadow p-6">
-      <h2 className="text-lg font-semibold mb-4">Users</h2>
-      <input
-        type="text"
-        placeholder="Search users..."
-        className="p-2 border rounded mb-4 w-full"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <table className="w-full text-sm border-collapse">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">Name</th>
-            <th className="p-2">Email</th>
-            <th className="p-2">Phone</th>
-            <th className="p-2">Role</th>
-            <th className="p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.length === 0 ? (
-            <tr>
-              <td colSpan={5} className="text-center p-4 text-gray-500">
-                No users found.
-              </td>
+    <section className="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto mt-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h2 className="text-2xl font-bold text-blue-700 tracking-tight">User Management</h2>
+        <input
+          type="text"
+          placeholder="🔍 Search users by name..."
+          className="p-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full md:w-72"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+      <div className="overflow-x-auto rounded-lg shadow">
+        <table className="w-full text-sm border-collapse bg-white">
+          <thead>
+            <tr className="bg-blue-100 text-blue-900">
+              <th className="p-3 font-semibold">Name</th>
+              <th className="p-3 font-semibold">Email</th>
+              <th className="p-3 font-semibold">Phone</th>
+              <th className="p-3 font-semibold">Role</th>
+              <th className="p-3 font-semibold">Actions</th>
             </tr>
-          ) : (
-            filteredUsers.map((u) => (
-              <tr key={u._id} className="border-t">
-                <td className="p-2">{u.fullName}</td>
-                <td className="p-2">{u.email}</td>
-                <td className="p-2">{u.phone}</td>
-                <td className="p-2">{u.role}</td>
-                <td className="p-2">
-                  <button
-                    onClick={() => handleDeleteUser(u._id)}
-                    className="text-red-600 underline"
-                  >
-                    Delete
-                  </button>
+          </thead>
+          <tbody>
+            {filteredUsers.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center p-6 text-gray-400 font-medium bg-gray-50">
+                  No users found.
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              filteredUsers.map((u) => (
+                <tr key={u._id} className="border-b hover:bg-blue-50 transition">
+                  <td className="p-3 font-medium flex items-center gap-2">
+                    <span className="inline-block w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center font-bold uppercase">
+                      {u.fullName?.[0] || '?'}
+                    </span>
+                    {u.fullName}
+                  </td>
+                  <td className="p-3">{u.email}</td>
+                  <td className="p-3">{u.phone}</td>
+                  <td className="p-3">
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${u.role === 'admin' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700'}`}>
+                      {u.role}
+                    </span>
+                  </td>
+                  <td className="p-3">
+                    <button
+                      onClick={() => handleDeleteUser(u._id)}
+                      className="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-semibold transition"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

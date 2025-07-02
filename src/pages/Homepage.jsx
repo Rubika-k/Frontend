@@ -85,9 +85,9 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Your Trusted Home Service Professionals</h1>
           <p className="text-lg md:text-xl mb-6">Connecting homeowners with local workers for all your home service needs</p>
-          <button onClick={handleBookNow} className="bg-white text-blue-600 font-medium px-6 py-3 rounded hover:bg-gray-100 transition">
+          {/* <button onClick={handleBookNow} className="bg-white text-blue-600 font-medium px-6 py-3 rounded hover:bg-gray-100 transition">
             Book Now
-          </button>
+          </button> */}
         </div>
       </section>
 
