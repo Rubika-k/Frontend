@@ -81,28 +81,32 @@ const BookingForm = () => {
     : workers;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-200 ">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 animate-fadein">
       <Navbar />
       <main className="flex-grow container mx-auto py-12 px-4">
-        <h1 className="text-3xl font-bold text-center text-Black mb-4">Book a Service</h1>
+        <h1 className="text-4xl font-extrabold text-center text-blue-800 mb-6 tracking-tight drop-shadow animate-slidein">
+          Book a Service
+        </h1>
 
-        {message && <p className="text-center text-red-600 mb-4">{message}</p>}
+        {message && (
+          <p className="text-center text-red-600 mb-4 animate-pulse">{message}</p>
+        )}
 
         <form
           onSubmit={handleSubmit}
-          className="max-w-xl mx-auto bg-white rounded-lg shadow-md p-6 space-y-4 border-t-4 border-blue-500"
+          className="max-w-xl mx-auto bg-white rounded-2xl shadow-2xl p-8 space-y-5 border-t-8 border-blue-500 transition-all duration-300 hover:shadow-blue-200"
         >
           <input
             name="workTitle"
             placeholder="Work Title"
-            className="w-full border p-2 rounded"
+            className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
             onChange={handleChange}
           />
           <textarea
             name="description"
             placeholder="Description"
-            className="w-full border p-2 rounded"
+            className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             rows="4"
             required
             onChange={handleChange}
@@ -110,7 +114,7 @@ const BookingForm = () => {
           <input
             name="serviceLocation"
             placeholder="Service Location"
-            className="w-full border p-2 rounded"
+            className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
             onChange={handleChange}
           />
@@ -118,14 +122,14 @@ const BookingForm = () => {
             <input
               type="date"
               name="preferredDate"
-              className="w-full border p-2 rounded"
+              className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               required
               onChange={handleChange}
             />
             <input
               type="time"
               name="preferredTime"
-              className="w-full border p-2 rounded"
+              className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               required
               onChange={handleChange}
             />
@@ -134,13 +138,13 @@ const BookingForm = () => {
             type="number"
             name="estimatedHours"
             placeholder="Estimated Hours"
-            className="w-full border p-2 rounded"
+            className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
             onChange={handleChange}
           />
           <select
             name="urgency"
-            className="w-full border p-2 rounded"
+            className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             value={form.urgency}
             onChange={handleChange}
           >
@@ -150,7 +154,7 @@ const BookingForm = () => {
           </select>
           <select
             name="paymentOption"
-            className="w-full border p-2 rounded"
+            className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             value={form.paymentOption}
             onChange={handleChange}
           >
@@ -160,7 +164,7 @@ const BookingForm = () => {
           {/* Worker selection */}
           {!selectedWorker && (
             <select
-              className="w-full border p-2 rounded"
+              className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
               value={selectedWorker}
               onChange={handleWorkerChange}
               required
@@ -175,20 +179,20 @@ const BookingForm = () => {
           )}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-700 transition"
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:scale-105 hover:shadow-blue-300 transition-transform duration-200"
           >
             Confirm Booking
           </button>
         </form>
 
         {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded shadow text-center max-w-sm">
-              <h2 className="text-2xl mb-2 font-bold text-green-600">✅ Booking Successful</h2>
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate-fadein">
+            <div className="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-sm animate-pop">
+              <h2 className="text-2xl mb-2 font-bold text-green-600 animate-bounce">✅ Booking Successful</h2>
               <p className="mb-4">Your request has been sent. Please wait for admin approval.</p>
               <button
                 onClick={handleCloseModal}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
               >
                 Go to Profile
               </button>
@@ -197,6 +201,16 @@ const BookingForm = () => {
         )}
       </main>
       <Footer />
+
+      {/* Animations */}
+      <style>{`
+        .animate-fadein { animation: fadein 1s; }
+        @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+        .animate-slidein { animation: slidein 0.8s; }
+        @keyframes slidein { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate-pop { animation: pop 0.4s; }
+        @keyframes pop { 0% { transform: scale(0.7); opacity: 0; } 80% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+      `}</style>
     </div>
   );
 };

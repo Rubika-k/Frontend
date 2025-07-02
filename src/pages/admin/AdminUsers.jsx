@@ -30,14 +30,17 @@ export default function AdminUsers() {
     u.fullName?.toLowerCase().includes(search.toLowerCase())
   );
 
-  return (
-    <section className="bg-white rounded-xl shadow-lg p-8 max-w-5xl mx-auto mt-8">
+ return (
+  <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 animate-fadein py-10">
+    <section className="bg-white rounded-2xl shadow-2xl p-8 max-w-5xl mx-auto mt-8 animate-pop">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <h2 className="text-2xl font-bold text-blue-700 tracking-tight">User Management</h2>
+        <h2 className="text-3xl font-extrabold text-blue-700 tracking-tight animate-slidein drop-shadow">
+          User Management
+        </h2>
         <input
           type="text"
           placeholder="🔍 Search users by name..."
-          className="p-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full md:w-72"
+          className="p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 w-full md:w-72 transition"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -56,7 +59,7 @@ export default function AdminUsers() {
           <tbody>
             {filteredUsers.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center p-6 text-gray-400 font-medium bg-gray-50">
+                <td colSpan={5} className="text-center p-6 text-gray-400 font-medium bg-gray-50 animate-fadein">
                   No users found.
                 </td>
               </tr>
@@ -64,7 +67,7 @@ export default function AdminUsers() {
               filteredUsers.map((u) => (
                 <tr key={u._id} className="border-b hover:bg-blue-50 transition">
                   <td className="p-3 font-medium flex items-center gap-2">
-                    <span className="inline-block w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center font-bold uppercase">
+                    <span className="inline-block w-8 h-8 rounded-full bg-blue-200 text-blue-700 flex items-center justify-center font-bold uppercase shadow">
                       {u.fullName?.[0] || '?'}
                     </span>
                     {u.fullName}
@@ -79,7 +82,7 @@ export default function AdminUsers() {
                   <td className="p-3">
                     <button
                       onClick={() => handleDeleteUser(u._id)}
-                      className="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-semibold transition"
+                      className="bg-red-100 text-red-700 px-3 py-1 rounded hover:bg-red-200 font-semibold transition shadow"
                     >
                       Delete
                     </button>
@@ -91,5 +94,22 @@ export default function AdminUsers() {
         </table>
       </div>
     </section>
-  );
-}
+    {/* Animations */}
+    <style>{`
+      .animate-fadein { animation: fadein 1s; }
+      @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+      .animate-slidein { animation: slidein 0.8s; }
+      @keyframes slidein { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+      .animate-pop { animation: pop 0.4s; }
+      @keyframes pop { 0% { transform: scale(0.7); opacity: 0; } 80% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+    `}</style>
+    {/* Responsive Design */}
+    <style>{`
+      @media (max-width: 768px) {
+        .md\\:w-1\\/3 { width: 100%; }
+        .md\\:flex-row { flex-direction: column; }
+        .md\\:items-start { align-items: flex-start; }
+      }
+    `}</style>
+  </div>
+)};

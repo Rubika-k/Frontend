@@ -45,63 +45,87 @@ export default function UserProfile() {
   }
 
   return (
-    <div>
-      <Navbar />
-      <div className="max-w-3xl mx-auto py-12 px-4">
-        <h2 className="text-3xl font-bold mb-6 text-blue-700">My Profile</h2>
-        {user && (
-          <div className="bg-white rounded shadow p-6 mb-8 flex items-center gap-6">
-            {user.profilePicture ? (
-              <img
-                src={user.profilePicture}
-                alt="Profile"
-                className="w-24 h-24 rounded-full object-cover border-4 border-blue-200 shadow"
-              />
-            ) : (
-              <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center text-3xl text-gray-500 border-4 border-blue-100 shadow">
-                <span>{user.fullName ? user.fullName[0] : '?'}</span>
-              </div>
-            )}
-            <div>
-              <p><span className="font-semibold">Name:</span> {user.fullName}</p>
-              <p><span className="font-semibold">Email:</span> {user.email}</p>
-              <p><span className="font-semibold">Phone:</span> {user.phone}</p>
-              <p><span className="font-semibold">Address:</span> {user.address?.city}, {user.address?.street}</p>
+  <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 animate-fadein">
+    <Navbar />
+    <div className="max-w-3xl mx-auto py-12 px-4">
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-700 text-center drop-shadow animate-slidein">
+        My Profile
+      </h2>
+      {user && (
+        <div className="bg-white rounded-2xl shadow-xl p-6 mb-10 flex items-center gap-6 animate-pop">
+          {user.profilePicture ? (
+            <img
+              src={user.profilePicture}
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover border-4 border-blue-200 shadow"
+            />
+          ) : (
+            <div className="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center text-3xl text-blue-600 border-4 border-blue-100 shadow">
+              <span>{user.fullName ? user.fullName[0] : '?'}</span>
             </div>
+          )}
+          <div>
+            <p><span className="font-semibold">Name:</span> {user.fullName}</p>
+            <p><span className="font-semibold">Email:</span> {user.email}</p>
+            <p><span className="font-semibold">Phone:</span> {user.phone}</p>
+            <p><span className="font-semibold">Address:</span> {user.address?.city}, {user.address?.street}</p>
           </div>
-        )}
+        </div>
+      )}
 
-        <h3 className="text-2xl font-semibold mb-4">My Bookings</h3>
-        {loading ? (
-          <p>Loading...</p>
-        ) : bookings.length === 0 ? (
-          <p className="text-gray-500">No bookings found.</p>
-        ) : (
-          <table className="w-full text-sm border-collapse bg-white rounded shadow">
+      <h3 className="text-2xl font-semibold mb-4 animate-slidein">My Bookings</h3>
+      {loading ? (
+        <p className="text-center text-blue-600 animate-pulse">Loading...</p>
+      ) : bookings.length === 0 ? (
+        <p className="text-gray-500 text-center animate-fadein">No bookings found.</p>
+      ) : (
+        <div className="overflow-x-auto rounded-lg shadow animate-pop">
+          <table className="w-full text-sm border-collapse bg-white rounded-lg">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="p-2">Service</th>
-                <th className="p-2">Date</th>
-                <th className="p-2">Time</th>
-                <th className="p-2">Status</th>
-                <th className="p-2">Worker</th>
+              <tr className="bg-blue-100 text-blue-900">
+                <th className="p-3">Service</th>
+                <th className="p-3">Date</th>
+                <th className="p-3">Time</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Worker</th>
               </tr>
             </thead>
             <tbody>
-              {bookings.map((b) => (
-                <tr key={b._id} className="border-t">
-                  <td className="p-2">{b.workTitle}</td>
-                  <td className="p-2">{b.preferredDate}</td>
-                  <td className="p-2">{b.preferredTime}</td>
-                  <td className="p-2">{b.status}</td>
-                  <td className="p-2">{b.workerId?.fullName || "N/A"}</td>
+              {bookings.map((b, idx) => (
+                <tr key={b._id} className="border-t hover:bg-blue-50 transition-all duration-200">
+                  <td className="p-3">{b.workTitle}</td>
+                  <td className="p-3">{b.preferredDate}</td>
+                  <td className="p-3">{b.preferredTime}</td>
+                  <td className="p-3 font-semibold">
+                    <span className={
+                      b.status === "Accepted"
+                        ? "text-green-600"
+                        : b.status === "Rejected"
+                        ? "text-red-600"
+                        : b.status === "Completed"
+                        ? "text-blue-600"
+                        : "text-gray-700"
+                    }>
+                      {b.status}
+                    </span>
+                  </td>
+                  <td className="p-3">{b.workerId?.fullName || "N/A"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        )}
-      </div>
-      <Footer />
+        </div>
+      )}
     </div>
-  );
-}
+    <Footer />
+    {/* Animations */}
+    <style>{`
+      .animate-fadein { animation: fadein 1s; }
+      @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+      .animate-slidein { animation: slidein 0.8s; }
+      @keyframes slidein { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+      .animate-pop { animation: pop 0.5s; }
+      @keyframes pop { 0% { transform: scale(0.7); opacity: 0; } 80% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+    `}</style>
+  </div>
+)};

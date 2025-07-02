@@ -63,18 +63,20 @@ const Signup = () => {
   };
 
  return (
-  <div className="flex min-h-screen">
+  <div className="flex min-h-screen bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 animate-fadein">
     {/* Left side */}
-    <div className="w-2/3 bg-blue-500 flex items-left justify-center">
-      <img src={side1} alt="Worker Illustration" className="max-w-[80%] h-auto" />
+    <div className="w-2/3 hidden md:flex items-center justify-center animate-slidein">
+      <img src={side1} alt="Worker Illustration" className="max-w-[80%] h-auto rounded-2xl shadow-2xl" />
     </div>
 
     {/* Right side */}
-    <div className="w-1/3 flex items-center justify-center bg-white px-6">
-      <div className="w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+    <div className="w-full md:w-1/3 flex items-center justify-center bg-white bg-opacity-90 px-6">
+      <div className="w-full max-w-md p-8 rounded-2xl shadow-2xl animate-pop border-t-4 border-blue-500">
+        <h2 className="text-3xl font-extrabold mb-6 text-center text-blue-700 animate-slidein drop-shadow">
+          Sign Up
+        </h2>
         {message && (
-          <div className="text-red-600 mb-4 text-sm text-center">{message}</div>
+          <div className="text-red-600 mb-4 text-sm text-center animate-bounce">{message}</div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -83,7 +85,7 @@ const Signup = () => {
             placeholder="Full Name"
             value={form.fullName}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
           />
           <input
@@ -92,7 +94,7 @@ const Signup = () => {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
           />
           <input
@@ -101,7 +103,7 @@ const Signup = () => {
             placeholder="Phone Number"
             value={form.phone}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
           <input
             name="password"
@@ -109,7 +111,7 @@ const Signup = () => {
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
           />
           <input
@@ -118,7 +120,7 @@ const Signup = () => {
             placeholder="Confirm Password"
             value={form.confirmPassword}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
           />
           <input
@@ -127,7 +129,7 @@ const Signup = () => {
             placeholder="City"
             value={form.address.city}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           />
           <input
             name="street"
@@ -135,19 +137,38 @@ const Signup = () => {
             placeholder="Street Address"
             value={form.address.street}
             onChange={handleChange}
-            className="w-full p-2 border rounded mb-4"
+            className="w-full p-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition mb-2"
           />
           <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-              Sign Up
-          </button>     
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:scale-105 hover:shadow-blue-300 transition-transform duration-200"
+          >
+            Sign Up
+          </button>
         </form>
-        {/* form goes here */}
+        <p className="text-sm text-center mt-6">
+          Already have an account?{' '}
+          <a href="/login" className="text-blue-700 underline hover:opacity-80 font-semibold">
+            Login
+          </a>
+        </p>
       </div>
     </div>
+    {/* Animations */}
+    <style>{`
+      .animate-fadein { animation: fadein 1s; }
+      @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+      .animate-slidein { animation: slidein 0.8s; }
+      @keyframes slidein { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+      .animate-pop { animation: pop 0.4s; }
+      @keyframes pop { 0% { transform: scale(0.7); opacity: 0; } 80% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); } }
+      .animate-bounce { animation: bounce 0.7s; }
+      @keyframes bounce { 0% { transform: translateY(-30px); } 50% { transform: translateY(10px); } 100% { transform: translateY(0); } }
+      @media (max-width: 768px) {
+        .md\\:w-1\\/3 { width: 100%; }
+        .md\\:flex { display: none; }
+      }
+    `}</style>
   </div>
-);
-};
-
+)};
 export default Signup;
