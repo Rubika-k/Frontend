@@ -5,6 +5,9 @@ import User from '../models/User.js';
 // ========== CREATE BOOKINGS ==========
 export const createBooking = async (req, res) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: "Unauthorized: user not found" });
+    }
     const booking = new Booking({
       ...req.body,
       userId: req.user._id
@@ -17,7 +20,6 @@ export const createBooking = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
 
 // ========== GET USER BOOKINGS ==========
 export const getUserBookings = async (req, res) => {

@@ -12,8 +12,7 @@ import { verifyToken } from '../middlewares/authMiddleware.js';
 import { isAdmin } from '../middlewares/roleMiddleware.js';
 
 const router = express.Router();
-
-// ✅ Public or logged-in users (customer/worker) can view workers by category
+// Public: Get by category
 router.get('/', getWorkersByCategory); // eg: /api/workers?category=Electrician
 
 // Admin: View all workers (no filter)
