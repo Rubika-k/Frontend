@@ -3,6 +3,7 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import axios from '../../axiosConfig';
 import { useNavigate, useLocation } from 'react-router-dom';
+import bgImg from '../../assets/back4.jpg'; // Adjust the path as necessary
 
 const BookingForm = () => {
   const [form, setForm] = useState({
@@ -81,7 +82,15 @@ const BookingForm = () => {
     : workers;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 animate-fadein">
+    <div
+      className="min-h-screen flex flex-col bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 animate-fadein"
+      style={{
+              backgroundImage: `url(${bgImg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+    >
       <Navbar />
       <main className="flex-grow container mx-auto py-12 px-4">
         <h1 className="text-4xl font-extrabold text-center text-blue-800 mb-6 tracking-tight drop-shadow animate-slidein">
@@ -161,7 +170,6 @@ const BookingForm = () => {
             <option value="PayLater">Cash on Completion</option>
             <option value="PayNow">Pay Now</option>
           </select>
-          {/* Worker selection */}
           {!selectedWorker && (
             <select
               className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
@@ -170,7 +178,7 @@ const BookingForm = () => {
               required
             >
               <option value="">Select Worker</option>
-              {filteredWorkers.map(w => (
+              {filteredWorkers.filter(w => w && w._id).map(w => (
                 <option key={w._id} value={w._id}>
                   {w.fullName} ({w.category})
                 </option>

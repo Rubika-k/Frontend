@@ -13,7 +13,7 @@ export default function CategoryWorkers() {
     const params = new URLSearchParams(location.search);
     const cat = params.get("category");
     setCategory(cat || "");
-axios.get(`/api/workers/public/by-category?category=${encodeURIComponent(cat || "")}`)
+ axios.get(`/api/workers?category=${encodeURIComponent(cat || "")}`)
       .then(res => setWorkers(Array.isArray(res.data) ? res.data : res.data.workers || []));
   }, [id, location.search]);
 
