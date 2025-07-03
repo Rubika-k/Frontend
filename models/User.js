@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
   email: {
     type: String,
     required: true,
@@ -20,7 +19,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-
   address: {
     city: {
       type: String,
@@ -33,14 +31,17 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user','admin'],
+    enum: ['user', 'admin'],
+    default: 'user'
   },
-
+  profilePicture: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now
   }
 });
+
 const User = mongoose.model('User', userSchema);
 export default User;
-

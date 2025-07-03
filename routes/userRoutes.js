@@ -1,31 +1,31 @@
 import express from 'express';
-import { getUserById, updateUser, deleteUser, getAllUsers } from '../controllers/userController.js';
+import { 
+  getUserById, 
+  updateUser, 
+  deleteUser, 
+  getAllUsers,
+  getUserProfile,
+  updateProfilePicture 
+} from '../controllers/userController.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
 import { isAdmin } from '../middlewares/roleMiddleware.js';
-import { upload } from '../middlewares/upload.js';
-import User from '../models/User.js';
-
+import upload from '../middlewares/upload.js';
 const router = express.Router();
+
+// Admin routes
 router.get('/', verifyToken, isAdmin, getAllUsers);
 router.get('/:id', verifyToken, getUserById);
-router.put('/:id', verifyToken, isAdmin, updateUser);
+router.put('/:id', verifyToken, updateUser);
 router.delete('/:id', verifyToken, isAdmin, deleteUser);
 
-// Upload profile picture
-router.post('/me/profile-picture', verifyToken, upload.single('profilePicture'), async (req, res) => {
-  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    { profilePicture: `/uploads/profile-pictures/${req.file.filename}` },
-    { new: true }
-  );
-  res.json({ profilePicture: user.profilePicture });
-});
+// User profile routes
+router.get('/me', verifyToken, getUserProfile); // Using the controller function
 
-// Get current user info (including profile picture)
-router.get('/me', verifyToken, async (req, res) => {
-  const user = await User.findById(req.user.id);
-  res.json(user);
-});
+router.post('/me/profile-picture', 
+  verifyToken, 
+  upload.single('profilePicture'), 
+  updateProfilePicture // Using the controller function
+);
+
 
 export default router;
