@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from '../../axiosConfig';
+import axios from "@/config/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import side1 from '../../assets/side1.png';
 import { FaUserShield, FaLock, FaArrowRight } from 'react-icons/fa';
@@ -28,7 +28,7 @@ const Login = () => {
       if (res.data.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/profile');
+        navigate('/customer');
       }
     } catch (err) {
       setMessage(err.response?.data?.message || 'Login failed');

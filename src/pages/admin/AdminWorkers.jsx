@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../axiosConfig';
+import axios from '../../config/axiosConfig';
 
 export default function AdminWorkers() {
   const [workers, setWorkers] = useState([]);
@@ -33,17 +33,33 @@ export default function AdminWorkers() {
   };
 
   const fetchWorkers = async () => {
-    try {
-      const res = await axios.get('/api/workers/all', {
-        headers: { Authorization: `Bearer ${adminToken}` },
-      });
-      const data = Array.isArray(res.data) ? res.data : res.data.workers || [];
-      setWorkers(data);
-    } catch (error) {
-      console.error('Failed to fetch workers:', error);
-      setWorkers([]);
+  try {
+    const res = await axios.get('/api/workers/all', {
+      headers: { Authorization: `Bearer ${adminToken}` },
+      params: { $limit: 1000 } // Add if you need pagination
+    });
+    
+    // Enhanced response handling
+    let data = [];
+    if (Array.isArray(res.data)) {
+      data = res.data;
+    } else if (res.data?.workers) {
+      data = res.data.workers;
+    } else if (res.data?.data) {
+      data = res.data.data;
     }
-  };
+    
+    console.log('Fetched workers:', data);
+    setWorkers(data);
+  } catch (error) {
+    console.error('Fetch error:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      config: error.config
+    });
+    setWorkers([]);
+  }
+};
 
 
   // Handler functions (ensure these are defined)

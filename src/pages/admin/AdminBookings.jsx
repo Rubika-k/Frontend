@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../axiosConfig';
+import axios from '../../config/axiosConfig';
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);

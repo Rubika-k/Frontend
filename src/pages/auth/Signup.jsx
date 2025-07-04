@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from '../../axiosConfig';
+import axios from "@/config/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import side1 from '../../assets/side1.png';
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';

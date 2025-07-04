@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "../axiosConfig";
+import axios from "../config/axiosConfig";
 import { useNavigate } from "react-router-dom";
 
 export default function Categories() {

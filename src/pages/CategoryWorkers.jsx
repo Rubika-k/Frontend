@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "../axiosConfig";
+import axios from "../config/axiosConfig";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 export default function CategoryWorkers() {
