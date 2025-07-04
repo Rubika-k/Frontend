@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBooking, getBookingsByUser, getAllBookings, updateBookingStatus, deleteBooking } from '../controllers/bookingController.js';
+import { createBooking, getBookingsByUser, getAllBookings } from '../controllers/bookingController.js';
 import { verifyToken , isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -10,9 +10,7 @@ router.get('/user/:userId', verifyToken, getBookingsByUser);
 
 router.get('/admin/bookings', verifyToken, isAdmin, getAllBookings);
 
-router.put('/:id/status', verifyToken, isAdmin, updateBookingStatus);
-
-router.delete('/:id', verifyToken, isAdmin, deleteBooking);
+router.get('/bookings/admin', verifyToken, isAdmin, getAllBookings);
 
 
 export default router;
