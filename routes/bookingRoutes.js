@@ -1,29 +1,18 @@
 import express from 'express';
-import {
-  createBooking,
-  getBookings,
-  getAllBookings,
-  updateBookingStatus,
-  deleteBooking
-} from '../controllers/bookingController.js';
-import { verifyToken } from '../middlewares/authMiddleware.js';
-import { isAdmin } from '../middlewares/roleMiddleware.js';
+import { createBooking, getBookingsByUser, getAllBookings, updateBookingStatus, deleteBooking } from '../controllers/bookingController.js';
+import { verifyToken , isAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// User creates a booking (protected route)
 router.post('/', verifyToken, createBooking);
 
-// User gets their own bookings (protected route)
-router.get('/my-bookings', verifyToken, getBookings); // Changed route
+router.get('/user/:userId', verifyToken, getBookingsByUser);
 
-// Admin gets all bookings (protected + admin only)
-router.get('/all', verifyToken, isAdmin, getAllBookings); // Added '/all' for clarity
+router.get('/admin/bookings', verifyToken, isAdmin, getAllBookings);
 
-// Update booking status (protected + admin only)
-router.patch('/:id/status', verifyToken, isAdmin, updateBookingStatus); // More RESTful
+router.put('/:id/status', verifyToken, isAdmin, updateBookingStatus);
 
-// Delete booking (protected + admin only)
 router.delete('/:id', verifyToken, isAdmin, deleteBooking);
+
 
 export default router;

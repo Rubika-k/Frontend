@@ -1,6 +1,23 @@
 import Worker from '../models/worker.js';
 
-// ✅ Public Controller: Get workers by category
+// ✅ Public: Get workers by category (for Customers)
+export const getWorkersByCategory = async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    if (!category) {
+      return res.status(400).json({ message: 'Category is required' });
+    }
+
+    const workers = await Worker.find({ category }).select('-password');
+    res.status(200).json(workers);
+  } catch (error) {
+    console.error('Error in getWorkersByCategory:', error);
+    res.status(500).json({ message: 'Server Error', error });
+  }
+};
+
+// ✅ Admin: Get all workers (no filter)
 export const getAllWorkers = async (req, res) => {
   try {
     const workers = await Worker.find().select('-password');
@@ -10,6 +27,7 @@ export const getAllWorkers = async (req, res) => {
   }
 };
 
+// ✅ Admin: Get single worker by ID
 export const getWorkerById = async (req, res) => {
   try {
     const worker = await Worker.findById(req.params.id).select('-password');
@@ -20,27 +38,9 @@ export const getWorkerById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error fetching worker', error });
   }
-}
-
-export const getWorkersByCategory = async (req, res) => {
-  try {
-    const { category } = req.query;
-
-    if (!category) {
-      return res.status(400).json({ message: 'Category is required' });
-    }
-
-    const workers = await Worker.find({
-      category: category,
-    }).select('-password'); // Don’t send password
-
-    res.status(200).json(workers);
-  } catch (error) {
-    console.error('Error in getWorkersByCategory:', error);
-    res.status(500).json({ message: 'Server Error', error });
-  }
 };
 
+// ✅ Admin: Create new worker
 export const createWorker = async (req, res) => {
   try {
     const {
@@ -69,6 +69,7 @@ export const createWorker = async (req, res) => {
   }
 };
 
+// ✅ Admin: Update existing worker
 export const updateWorker = async (req, res) => {
   try {
     const worker = await Worker.findById(req.params.id);
@@ -76,7 +77,7 @@ export const updateWorker = async (req, res) => {
       return res.status(404).json({ message: 'Worker not found' });
     }
 
-    Object.assign(worker, req.body); // update fields
+    Object.assign(worker, req.body);
     await worker.save();
 
     res.status(200).json({ message: 'Worker updated', worker });
@@ -85,6 +86,7 @@ export const updateWorker = async (req, res) => {
   }
 };
 
+// ✅ Admin: Delete worker
 export const deleteWorker = async (req, res) => {
   try {
     const worker = await Worker.findByIdAndDelete(req.params.id);
@@ -93,6 +95,6 @@ export const deleteWorker = async (req, res) => {
     }
     res.status(200).json({ message: 'Worker deleted' });
   } catch (error) {
-        res.status(500).json({ message: 'Error deleting worker', error });
-      }
-    }
+    res.status(500).json({ message: 'Error deleting worker', error });
+  }
+};

@@ -11,11 +11,9 @@ const workerSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   registrationFeePaid: { type: Boolean, default: false },
   isAvailable: { type: Boolean, default: true },
-  nextAvailableTime: { type: String }, // or Date if you want
+  nextAvailableTime: { type: String }, // You can change to Date if needed
   createdAt: { type: Date, default: Date.now }
-
 });
+
 const Worker = mongoose.model('Worker', workerSchema);
 export default Worker;
-
-

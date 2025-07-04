@@ -27,6 +27,9 @@ app.use('/api/workers', workerRoutes); // Only accessible by admin
 app.use('/api/categories', categoryRoutes);
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
+app.use('/api', bookingRoutes);
+
+
 // Connect DB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

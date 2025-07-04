@@ -9,7 +9,7 @@ const bookingSchema = new mongoose.Schema({
   workerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Worker',
-    required: true
+    // required: true
   },
   workTitle: {
     type: String,
@@ -47,14 +47,11 @@ const bookingSchema = new mongoose.Schema({
     enum: ['PayLater', 'PayNow'],
     default: 'PayLater'
   },
-  status: {
+    status: {
     type: String,
     enum: ['Pending', 'Accepted', 'Rejected', 'Completed'],
     default: 'Pending'
   }
-}, {
-  timestamps: true
-});
+}, { timestamps: true });
 
-const Booking = mongoose.model('Booking', bookingSchema);
-export default Booking;
+export default mongoose.model('Booking', bookingSchema);
