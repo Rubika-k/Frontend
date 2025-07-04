@@ -1,5 +1,5 @@
-// models/Booking.js
 import mongoose from 'mongoose';
+
 const bookingSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -47,13 +47,13 @@ const bookingSchema = new mongoose.Schema({
     enum: ['PayLater', 'PayNow'],
     default: 'PayLater'
   },
-//   status: {
-//     type: String,
-//     enum: ['Pending', 'Accepted', 'Rejected', 'Completed'],
-//     default: 'Pending'
-//   }
-// }, {
-//   timestamps: true
+  status: {
+    type: String,
+    enum: ['Pending', 'Accepted', 'Rejected', 'Completed'],
+    default: 'Pending'
+  }
+}, {
+  timestamps: true
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);
