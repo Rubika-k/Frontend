@@ -7,7 +7,7 @@ const instance = axios.create({
   timeout: 10000,
 });
 
-// ✅ Attach token if it exists
+//  Attach token if it exists
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -18,7 +18,7 @@ instance.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// ✅ Optional: log or handle responses globally
+//  Optional: log or handle responses globally
 instance.interceptors.response.use(
   (response) => response,
   (error) => {

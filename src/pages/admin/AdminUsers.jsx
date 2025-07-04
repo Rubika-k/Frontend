@@ -12,16 +12,17 @@ export default function AdminUsers() {
     // eslint-disable-next-line
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      // ✅ ✅ Correct: remove extra `/api`
-      const res = await axios.get('/users');
-      console.log("✅ Fetched Users:", res.data);
-      setUsers(res.data || []);
-    } catch (error) {
-      console.error("❌ Error fetching users:", error.response?.data || error.message);
-    }
-  };
+
+const fetchUsers = async () => {
+  try {
+    const res = await axios.get('/users', {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    console.log('✅ Users:', res.data);
+  } catch (err) {
+    console.error('❌ Error fetching users:', err.response?.data || err.message);
+  }
+};
 
   const handleDeleteUser = async (id) => {
     if (!window.confirm('Delete this user?')) return;

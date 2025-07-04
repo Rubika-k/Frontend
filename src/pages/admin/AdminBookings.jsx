@@ -21,48 +21,34 @@ export default function AdminBookings() {
     }
   };
 
-  // const handleDeleteBooking = async (id) => {
-  //   if (!window.confirm('Delete this booking?')) return;
-  //   await axios.delete(`/api/bookings/${id}`, {
-  //     headers: { Authorization: `Bearer ${adminToken}` },
-  //   });
-  //   fetchBookings();
-  // };
-
-  // const updateStatus = async (id, status) => {
-  //   await axios.put(`/api/bookings/${id}/status`, { status }, {
-  //     headers: { Authorization: `Bearer ${adminToken}` },
-  //   });
-  //   fetchBookings();
-  // };
-
-
   // ✅ Update booking status
-  const updateStatus = async (id, status) => {
-    try {
-      await axios.put(`/bookings/${id}/status`, { status }, {
-        headers: { Authorization: `Bearer ${adminToken}` }
-      });
-      fetchBookings();
-    } catch (err) {
-      console.error('❌ Failed to update status:', err);
-    }
-  };
-
+  const updateStatus = async (bookingId, status) => {
+  try {
+    const token = localStorage.getItem("token");
+    await axios.put(
+      `/bookings/${bookingId}/status`,
+      { status },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    alert("Status updated successfully!");
+    fetchBookings(); // refresh bookings
+  } catch (err) {
+    console.error("❌ Failed to update status:", err.response?.data || err);
+  }
+};
     // ✅ Delete booking
-  const handleDeleteBooking = async (id) => {
-    if (!window.confirm('Delete this booking?')) return;
-    try {
-      await axios.delete(`/bookings/${id}`, {
-        headers: { Authorization: `Bearer ${adminToken}` }
-      });
-      fetchBookings();
-    } catch (err) {
-      console.error('❌ Failed to delete booking:', err);
-    }
-  };
-
-
+  const handleDeleteBooking = async (bookingId) => {
+  try {
+    const token = localStorage.getItem("token");
+    await axios.delete(`/bookings/${bookingId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    alert("Booking deleted successfully!");
+    fetchBookings(); // refresh bookings
+  } catch (err) {
+    console.error("❌ Failed to delete booking:", err.response?.data || err);
+  }
+};
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 animate-fadein py-8 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-pop">
