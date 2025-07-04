@@ -7,6 +7,7 @@ import bgImg from "../assets/backpic.jpg";
 import { useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar, FaMapMarkerAlt, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 
+
 const HomePage = () => {
   const navigate = useNavigate();
 
@@ -114,14 +115,14 @@ const HomePage = () => {
             Connecting homeowners with local workers for all your home service needs
           </p>
           <div className="flex gap-4 justify-center animate-fadein delay-200">
-            <button 
+            {/* <button 
               onClick={handleBookNow}
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
               Book a Service
-            </button>
+            </button> */}
             <button 
-              onClick={() => navigate("/categories")}
+              onClick={() => navigate("/login")}
               className="bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105"
             >
               Explore Services

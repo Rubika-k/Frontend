@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import axios from "@/config/axiosConfig";
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import axios from "@/config/axiosConfig";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import bgImg from '../../assets/back4.jpg';
 
 const BookingForm = () => {
@@ -12,29 +12,18 @@ const BookingForm = () => {
     serviceLocation: '',
     preferredDate: '',
     preferredTime: '',
-    estimatedHours: 1, // Changed to number default
+    estimatedHours: 1,
     urgency: 'Medium',
     paymentOption: 'PayLater'
   });
-  const [workers, setWorkers] = useState([]);
-  const [selectedWorker, setSelectedWorker] = useState('');
+
   const [message, setMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [category, setCategory] = useState('');
   const navigate = useNavigate();
-  const location = useLocation();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const workerId = params.get('workerId');
-    const categoryParam = params.get('category');
-    if (workerId) setSelectedWorker(workerId);
-    if (categoryParam) setCategory(categoryParam);
-
-    axios.get('/api/workers')
-      .then(res => setWorkers(res.data || []))
-      .catch(err => console.error("Error fetching workers:", err));
-  }, [location.search]);
+  // ✅ Only use userId now
+  const userId = localStorage.getItem('userId');
+  const token = localStorage.getItem('token');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,40 +33,26 @@ const BookingForm = () => {
     }));
   };
 
-  const handleWorkerChange = (e) => {
-    setSelectedWorker(e.target.value);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
-
-    const userId = localStorage.getItem('userId');
-    const token = localStorage.getItem('token');
 
     if (!userId || !token) {
       setMessage('⚠️ Please log in before booking.');
       return;
     }
-    if (!selectedWorker) {
-      setMessage('Please select a worker.');
-      return;
-    }
 
     try {
-      const bookingData = {
+      await axios.post('/bookings', {
         ...form,
-        userId,
-        workerId: selectedWorker
-      };
-
-      await axios.post('/api/bookings', bookingData, {
+        userId
+      }, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       setShowModal(true);
     } catch (err) {
-      console.error("Booking error:", err.response?.data);
+      console.error('Booking error:', err);
       setMessage(err.response?.data?.message || 'Booking failed. Please try again.');
     }
   };
@@ -87,57 +62,111 @@ const BookingForm = () => {
     navigate('/customer/dashboard');
   };
 
-  const filteredWorkers = category
-    ? workers.filter(w => w.category?.toLowerCase() === category.toLowerCase())
-    : workers;
-
   return (
     <div className="min-h-screen flex flex-col" style={{
       backgroundImage: `url(${bgImg})`,
       backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
+      backgroundPosition: 'center'
     }}>
       <Navbar />
       <main className="flex-grow container mx-auto py-12 px-4">
-        <h1 className="text-4xl font-extrabold text-center text-blue-800 mb-6 tracking-tight drop-shadow">
-          Book a Service
-        </h1>
+        <h1 className="text-4xl font-bold text-center text-blue-800 mb-6">Book a Service</h1>
 
         {message && (
-          <p className="text-center text-red-600 mb-4 animate-pulse">{message}</p>
+          <p className="text-center text-red-600 mb-4">{message}</p>
         )}
 
-        <form onSubmit={handleSubmit} className="max-w-xl mx-auto bg-white rounded-2xl shadow-2xl p-8 space-y-5 border-t-8 border-blue-500">
-          {/* Form fields remain exactly the same as your original */}
+        <form onSubmit={handleSubmit} className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl space-y-4">
           <input
             name="workTitle"
             placeholder="Work Title"
-            className="w-full border-2 border-blue-200 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             required
-            onChange={handleChange}
             value={form.workTitle}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          
-          {/* Keep all other form fields exactly as you had them */}
-          {/* ... */}
+
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            name="serviceLocation"
+            placeholder="Service Location"
+            required
+            value={form.serviceLocation}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            type="date"
+            name="preferredDate"
+            required
+            value={form.preferredDate}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            type="time"
+            name="preferredTime"
+            required
+            value={form.preferredTime}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            type="number"
+            name="estimatedHours"
+            min="1"
+            value={form.estimatedHours}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <select
+            name="urgency"
+            value={form.urgency}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+
+          <select
+            name="paymentOption"
+            value={form.paymentOption}
+            onChange={handleChange}
+            className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="PayLater">Pay Later</option>
+            <option value="PayNow">Pay Now</option>
+          </select>
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-3 rounded-lg font-bold text-lg shadow-md hover:scale-105 hover:shadow-blue-300 transition-transform duration-200"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-bold transition"
           >
             Confirm Booking
           </button>
         </form>
 
         {showModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-sm">
-              <h2 className="text-2xl mb-2 font-bold text-green-600">✅ Booking Successful</h2>
-              <p className="mb-4">Your request has been sent. Please wait for admin approval.</p>
+          <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white p-8 rounded-2xl shadow-xl text-center">
+              <h2 className="text-xl font-bold text-green-600 mb-2">✅ Booking Successful</h2>
+              <p>Your booking has been placed. Please wait for confirmation.</p>
               <button
                 onClick={handleCloseModal}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
               >
                 Go to Dashboard
               </button>

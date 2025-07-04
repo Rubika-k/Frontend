@@ -11,26 +11,57 @@ export default function AdminBookings() {
   }, []);
 
   const fetchBookings = async () => {
-    const res = await axios.get('/api/admin/bookings', {
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-    setBookings(res.data || []);
+    try {
+      const res = await axios.get('/admin/bookings', {
+        headers: { Authorization: `Bearer ${adminToken}` }
+      });
+      setBookings(res.data || []);
+    } catch (err) {
+      console.error('Failed to fetch bookings:', err);
+    }
   };
 
+  // const handleDeleteBooking = async (id) => {
+  //   if (!window.confirm('Delete this booking?')) return;
+  //   await axios.delete(`/api/bookings/${id}`, {
+  //     headers: { Authorization: `Bearer ${adminToken}` },
+  //   });
+  //   fetchBookings();
+  // };
+
+  // const updateStatus = async (id, status) => {
+  //   await axios.put(`/api/bookings/${id}/status`, { status }, {
+  //     headers: { Authorization: `Bearer ${adminToken}` },
+  //   });
+  //   fetchBookings();
+  // };
+
+
+  // ✅ Update booking status
+  const updateStatus = async (id, status) => {
+    try {
+      await axios.put(`/bookings/${id}/status`, { status }, {
+        headers: { Authorization: `Bearer ${adminToken}` }
+      });
+      fetchBookings();
+    } catch (err) {
+      console.error('❌ Failed to update status:', err);
+    }
+  };
+
+    // ✅ Delete booking
   const handleDeleteBooking = async (id) => {
     if (!window.confirm('Delete this booking?')) return;
-    await axios.delete(`/api/bookings/${id}`, {
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-    fetchBookings();
+    try {
+      await axios.delete(`/bookings/${id}`, {
+        headers: { Authorization: `Bearer ${adminToken}` }
+      });
+      fetchBookings();
+    } catch (err) {
+      console.error('❌ Failed to delete booking:', err);
+    }
   };
 
-  const updateStatus = async (id, status) => {
-    await axios.put(`/api/bookings/${id}/status`, { status }, {
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-    fetchBookings();
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 animate-fadein py-8 px-4 sm:px-6">
@@ -109,7 +140,7 @@ export default function AdminBookings() {
                         <div className="flex flex-wrap gap-2">
                           {b.status !== 'Accepted' && (
                             <button
-                              onClick={() => updateStatus(b._id, 'Accepted')}
+                             onClick={() => updateStatus(b._id, 'Accepted')}
                               className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                             >
                               Accept

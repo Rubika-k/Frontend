@@ -18,7 +18,7 @@ export default function AdminServices() {
   };
 
   const fetchCategories = async () => {
-    const res = await axios.get('/api/categories');
+    const res = await axios.get('/categories');
     setCategories(res.data || []);
   };
 
@@ -28,7 +28,7 @@ export default function AdminServices() {
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
-    await axios.post('/api/categories', newCategory, {
+    await axios.post('/categories', newCategory, {
       headers: { Authorization: `Bearer ${adminToken}` },
     });
     setNewCategory({ name: '', icon: '' });
@@ -38,7 +38,7 @@ export default function AdminServices() {
 
   const handleDeleteCategory = async (id) => {
     if (!window.confirm('Delete this category?')) return;
-    await axios.delete(`/api/categories/${id}`, {
+    await axios.delete(`/categories/${id}`, {
       headers: { Authorization: `Bearer ${adminToken}` },
     });
     fetchCategories();

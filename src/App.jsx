@@ -14,6 +14,7 @@ import CategoryWorkers from './pages/CategoryWorkers';
 // import UserProfile from './pages/UserProfile';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import React, { useState } from 'react';
+import CustomerDashboard from './pages/Customer/Dashboard.jsx';
 
 function App() {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
@@ -27,6 +28,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/customer" element={<Customer />} />
+            <Route path="/customer/dashboard" element={<CustomerDashboard />} /> {/* ✅ move here */}
+
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:id" element={<CategoryWorkers />} />
           {/* <Route path="/profile" element={<UserProfile />} /> */}
@@ -37,6 +40,7 @@ function App() {
             <Route path="services" element={<AdminServices />} />
             <Route index element={<AdminDashboard />} />
             <Route path="dashboard" element={<AdminDashboard />} />
+
           </Route>
         </Routes>
       </Router>

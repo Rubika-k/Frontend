@@ -7,23 +7,32 @@ export default function AdminUsers() {
   const adminToken = localStorage.getItem('token');
 
   useEffect(() => {
+    console.log("✅ Admin Token:", adminToken);
     fetchUsers();
     // eslint-disable-next-line
   }, []);
 
   const fetchUsers = async () => {
-    const res = await axios.get('/api/users', {
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-    setUsers(res.data || []); // Accepts array directly from backend
+    try {
+      // ✅ ✅ Correct: remove extra `/api`
+      const res = await axios.get('/users');
+      console.log("✅ Fetched Users:", res.data);
+      setUsers(res.data || []);
+    } catch (error) {
+      console.error("❌ Error fetching users:", error.response?.data || error.message);
+    }
   };
 
   const handleDeleteUser = async (id) => {
     if (!window.confirm('Delete this user?')) return;
-    await axios.delete(`/api/users/${id}`, {
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-    fetchUsers();
+    try {
+      // ✅ ✅ Correct: remove extra `/api`
+      await axios.delete(`/users/${id}`);
+      fetchUsers(); // refresh list
+    } catch (error) {
+      console.error("❌ Error deleting user:", error.response?.data || error.message);
+      alert("Failed to delete user. See console for details.");
+    }
   };
 
   const filteredUsers = users.filter((u) =>
@@ -33,7 +42,7 @@ export default function AdminUsers() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 animate-fadein py-8 px-4 sm:px-6">
       <section className="bg-white rounded-3xl shadow-xl overflow-hidden max-w-6xl mx-auto animate-pop">
-        {/* Header with gradient */}
+        {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-8 py-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
@@ -67,7 +76,7 @@ export default function AdminUsers() {
           </div>
         </div>
 
-        {/* Table container */}
+        {/* Table */}
         <div className="overflow-x-auto p-6">
           <table className="w-full text-sm border-collapse">
             <thead>
@@ -144,7 +153,7 @@ export default function AdminUsers() {
         </div>
       </section>
 
-      {/* Enhanced Animations */}
+      {/* Animations */}
       <style>{`
         .animate-fadein { animation: fadein 0.6s ease-out; }
         @keyframes fadein { 
