@@ -83,37 +83,37 @@ export const getUserProfile = async (req, res) => {
   };
 
 
-export const updateProfilePicture = async (req, res) => {
-  try {
-    if (!req.file) {
-      console.log('No file received in request');
-      return res.status(400).json({ message: 'No file uploaded' });
-    }
+// export const updateProfilePicture = async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       console.log('No file received in request');
+//       return res.status(400).json({ message: 'No file uploaded' });
+//     }
 
-    console.log('File received:', {
-      originalname: req.file.originalname,
-      mimetype: req.file.mimetype,
-      size: req.file.size
-    });
+//     console.log('File received:', {
+//       originalname: req.file.originalname,
+//       mimetype: req.file.mimetype,
+//       size: req.file.size
+//     });
 
-    const result = await uploadToCloudinary(req.file.buffer);
-    console.log('Cloudinary upload result:', result);
+//     const result = await uploadToCloudinary(req.file.buffer);
+//     console.log('Cloudinary upload result:', result);
 
-    const user = await User.findByIdAndUpdate(
-      req.user.id,
-      { profilePicture: result.secure_url },
-      { new: true }
-    ).select('-password');
+//     const user = await User.findByIdAndUpdate(
+//       req.user.id,
+//       { profilePicture: result.secure_url },
+//       { new: true }
+//     ).select('-password');
 
-    res.json({
-      message: 'Profile picture updated successfully',
-      profilePicture: user.profilePicture
-    });
-  } catch (err) {
-    console.error('FULL UPLOAD ERROR:', err);
-    res.status(500).json({
-      message: 'Error uploading profile picture',
-      error: process.env.NODE_ENV === 'development' ? err.message : 'Failed to process image'
-    });
-  }
-};
+//     res.json({
+//       message: 'Profile picture updated successfully',
+//       profilePicture: user.profilePicture
+//     });
+//   } catch (err) {
+//     console.error('FULL UPLOAD ERROR:', err);
+//     res.status(500).json({
+//       message: 'Error uploading profile picture',
+//       error: process.env.NODE_ENV === 'development' ? err.message : 'Failed to process image'
+//     });
+//   }
+// };

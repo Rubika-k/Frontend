@@ -24,7 +24,7 @@ export const createBooking = async (req, res) => {
       estimatedHours,
       urgency,
       paymentOption
-      // ✅ workerId is removed!
+      
     });
 
     await newBooking.save();

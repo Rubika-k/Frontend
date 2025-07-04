@@ -14,7 +14,7 @@ import { isAdmin } from '../middlewares/roleMiddleware.js';
 const router = express.Router();
 
 // Admin routes
-router.get('/', verifyToken, isAdmin, getAllUsers);
+router.get('/users', verifyToken, isAdmin, getAllUsers);
 router.get('/:id', verifyToken, getUserById);
 router.put('/:id', verifyToken, updateUser);
 router.delete('/:id', verifyToken, isAdmin, deleteUser);

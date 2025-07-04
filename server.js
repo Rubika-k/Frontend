@@ -8,7 +8,7 @@ import userRoutes from './routes/userRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js'; 
 import workerRoutes from './routes/workerRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js'; 
-import path from 'path'
+// import path from 'path'
 
 
 const app = express();
@@ -25,7 +25,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/workers', workerRoutes); // Only accessible by admin
 app.use('/api/categories', categoryRoutes);
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+// app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use('/api', bookingRoutes);
 
