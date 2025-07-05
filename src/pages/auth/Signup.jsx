@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from "@/config/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import side1 from '../../assets/side1.png';
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaLock, FaMapMarkerAlt, FaArrowRight, FaHome } from 'react-icons/fa';
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -96,8 +96,8 @@ const Signup = () => {
             <div
               className={`mb-6 p-3 rounded-lg text-center font-medium animate-bounce ${
                 message.toLowerCase().includes('success')
-                ? 'bg-green-100 text-green-700'
-                : 'bg-red-100 text-red-700'
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-red-100 text-red-700'
               }`}
             >
               {message}
@@ -235,6 +235,16 @@ const Signup = () => {
             >
               Login here
             </a>
+          </div>
+
+          {/* ✅ Back to Home link */}
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => navigate("/")}
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline transition-all"
+            >
+              <FaHome /> Back to Home
+            </button>
           </div>
         </div>
       </div>
