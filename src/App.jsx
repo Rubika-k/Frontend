@@ -2,19 +2,19 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Homepage';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
-import Customer from "./pages/Customer/Dashboard.jsx";
+import Customer from "./pages/Customer/Profile.jsx";
 import BookingForm from './pages/Customer/BookingForm.jsx';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminWorkers from './pages/admin/AdminWorkers';
 import AdminBookings from './pages/admin/AdminBookings';
 import AdminServices from './pages/admin/AdminServices';
-import Categories from './pages/Categories';
+import AdminMessage from './pages/admin/AdminMessage';
+// import Categories from './pages/Categories';
 import CategoryWorkers from './pages/CategoryWorkers';
 // import UserProfile from './pages/UserProfile';
-import AdminDashboard from './pages/admin/AdminDashboard';
 import React, { useState } from 'react';
-import CustomerDashboard from './pages/Customer/Dashboard.jsx';
+import CustomerProfile from './pages/Customer/Profile.jsx';
 
 function App() {
   const [isSignupOpen, setIsSignupOpen] = useState(false);
@@ -28,19 +28,16 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/customer" element={<Customer />} />
-            <Route path="/customer/dashboard" element={<CustomerDashboard />} /> {/* ✅ move here */}
-
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/categories/:id" element={<CategoryWorkers />} />
-          {/* <Route path="/profile" element={<UserProfile />} /> */}
+            <Route path="/profile" element={<CustomerProfile />} /> 
+          {/* <Route path="/categories" element={<Categories />} /> */}
+          <Route path="/workers" element={<CategoryWorkers />} />
+          {/* <Route path="/userprofile" element={<UserProfile />} /> */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="users" element={<AdminUsers />} />
             <Route path="workers" element={<AdminWorkers />} />
             <Route path="bookings" element={<AdminBookings />} />
             <Route path="services" element={<AdminServices />} />
-            <Route index element={<AdminDashboard />} />
-            <Route path="dashboard" element={<AdminDashboard />} />
-
+            <Route path="messages" element={<AdminMessage />} />
           </Route>
         </Routes>
       </Router>

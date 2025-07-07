@@ -291,7 +291,7 @@ export default function CustomerDashboard() {
                 <FiStar className="text-4xl mx-auto text-gray-400 mb-4" />
                 <p className="text-gray-600 mb-4">You haven't added any workers to favorites yet.</p>
                 <button 
-                  onClick={() => navigate('/workers')}
+                  onClick={() => navigate('/categories')}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >
                   Browse Workers
@@ -324,9 +324,6 @@ export default function CustomerDashboard() {
                           className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
                         >
                           Book Now
-                        </button>
-                        <button className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm flex items-center gap-1">
-                          <FiPhone size={14} /> Call
                         </button>
                       </div>
                     </div>

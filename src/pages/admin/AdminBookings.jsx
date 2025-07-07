@@ -12,7 +12,7 @@ export default function AdminBookings() {
 
   const fetchBookings = async () => {
     try {
-      const res = await axios.get('/admin/bookings', {
+      const res = await axios.get('http://localhost:5000/api/bookings/admin/bookings', {
         headers: { Authorization: `Bearer ${adminToken}` }
       });
       setBookings(res.data || []);

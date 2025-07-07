@@ -45,25 +45,53 @@ export default function AdminServices() {
     showPopup('Service category deleted successfully!', 'success');
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 animate-fadein py-8 px-4 sm:px-6">
-      {/* Notification Popup */}
-      {popup.show && (
-        <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-xl text-white font-medium flex items-center gap-2 ${
-          popup.type === 'success' ? 'bg-emerald-500' : 'bg-rose-500'
-        } animate-pop`}>
+ 
+    return (
+  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-8 px-4 sm:px-6">
+    {/* Enhanced Notification Toast */}
+    {popup.show && (
+      <div className={`
+        fixed top-6 left-1/2 transform -translate-x-1/2 z-50
+        max-w-md w-full px-4 py-3 rounded-lg shadow-lg
+        backdrop-blur-sm bg-white/90 border
+        flex items-start space-x-3
+        transition-all duration-300 ease-out
+        ${popup.type === 'success' 
+          ? 'border-emerald-200 text-emerald-800' 
+          : 'border-rose-200 text-rose-800'
+        }
+        ${popup.show ? 'animate-fade-in-up' : 'animate-fade-out'}
+      `}>
+        <div className={`
+          flex-shrink-0 h-6 w-6 mt-0.5
+          ${popup.type === 'success' ? 'text-emerald-500' : 'text-rose-500'}
+        `}>
           {popup.type === 'success' ? (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           ) : (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-full h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           )}
-          {popup.message}
         </div>
-      )}
+        <div className="flex-1">
+          <p className="font-medium">
+            {popup.type === 'success' ? 'Success' : 'Error'}
+          </p>
+          <p className="text-sm opacity-90">{popup.message}</p>
+        </div>
+        <button 
+          onClick={() => setPopup({...popup, show: false})}
+          className="text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    )}
 
       <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-pop">
         {/* Header Section */}
@@ -76,6 +104,7 @@ export default function AdminServices() {
         <form onSubmit={handleAddCategory} className="p-6 border-b border-blue-100">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
+              <h3 className="text-lg font-semibold text-blue-800 mb-2">Add New Category</h3>
               <label className="block text-sm font-medium text-blue-800 mb-1">Category Name</label>
               <input
                 type="text"

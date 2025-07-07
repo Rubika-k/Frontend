@@ -23,10 +23,10 @@ function Navbar() {
           >
             <div className="text-3xl font-bold flex items-center gap-1">
               <span className="text-red-500 bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
-                Home
+                 Breeze
               </span>
               <span className="text-blue-500 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                Breeze
+               Home
               </span>
             </div>
           </div>
@@ -38,7 +38,7 @@ function Navbar() {
                 { label: "Services", href: "#services" },
                 { label: "How It Works", href: "#how-it-works" },
                 { label: "Professionals", href: "#professionals" },
-                { label: "Testimonials", href: "#testimonials" },
+                // { label: "Testimonials", href: "#testimonials" },
                 { label: "Contact", href: "#contact" },
               ].map((item) => (
                 <a
@@ -62,13 +62,13 @@ function Navbar() {
                     <FaUserCircle className="text-sm" />
                     <span>Profile</span>
                   </button>
-                  <button
+                  {/* <button
                     onClick={handleLogout}
                     className="flex items-center gap-2 px-4 py-2 rounded-lg text-red-600 border border-red-600 hover:bg-red-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
                   >
                     <FaSignOutAlt className="text-sm" />
                     <span>Logout</span>
-                  </button>
+                  </button> */}
                 </>
               ) : (
                 <>
@@ -145,12 +145,12 @@ function Navbar() {
                   >
                     Profile
                   </button>
-                  <button
+                  {/* <button
                     onClick={handleLogout}
                     className="w-full px-4 py-2 rounded-md text-center text-red-600 border border-red-600 hover:bg-red-600 hover:text-white transition duration-150 ease-in-out"
                   >
                     Logout
-                  </button>
+                  </button> */}
                 </>
               ) : (
                 <>
