@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 // import cleanerImg from "../assets/cleaner.jpeg";
 import bgImg from "../assets/backpic.jpg";
 import { useNavigate } from "react-router-dom";
-import { FaStar, FaRegStar, FaMapMarkerAlt, FaCheckCircle, FaArrowRight, FaQuoteLeft, FaChevronDown } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "../config/axiosConfig";
@@ -16,7 +16,7 @@ import React, { useState, useEffect } from "react";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);  
+  const [categories, setCategories] = useState([]);
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',
@@ -24,23 +24,20 @@ const HomePage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
-   const [showAllServices, setShowAllServices] = useState(false);
+  const [showAllServices, setShowAllServices] = useState(false);
   const [contactMsg, setContactMsg] = useState("");
-  
-  
- 
-  // Services data with actual worker counts
-const [services, setServices] = useState([]);
-useEffect(() => {
-  axios.get("/categories")
-    .then(res => {
-      console.log("Fetched services:", res.data);
-      setServices(res.data);
-    })
-    .catch(err => {
-      console.error("Failed to load services:", err);
-    });
-}, []);
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    axios.get("/categories")
+      .then(res => {
+        console.log("Fetched services:", res.data);
+        setServices(res.data);
+      })
+      .catch(err => {
+        console.error("Failed to load services:", err);
+      });
+  }, []);
 
   const handleNavigation = (path) => {
     const token = localStorage.getItem('token');
@@ -51,64 +48,31 @@ useEffect(() => {
     }
   };
 
-  const handleContactSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast.success('Message sent successfully! Our team will get back to you soon.', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      
-      setContactForm({ name: '', email: '', message: '' });
-      setContactMsg("Message sent successfully!");
-    } catch (error) {
-      toast.error('Failed to send message. Please try again later.', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setContactForm(prev => ({ ...prev, [name]: value }));
   };
-  useEffect(() => {
-    // Fetch categories from backend
-    axios.get("/categories").then(res => setCategories(res.data || []));
-  }, []);
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await axios.post('/contact/send', contactForm);
+      toast.success('Message sent successfully!');
+      setContactForm({ name: '', email: '', message: '' });
+      setContactMsg("Message sent successfully!");
+    } catch (error) {
+      toast.error('Failed to send message.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const toggleCategoryExpand = (categoryId) => {
     if (expandedCategory === categoryId) {
       setExpandedCategory(null);
     } else {
       setExpandedCategory(categoryId);
-    }
-  };
-
-  const handleViewWorkers = (categoryId, categoryName) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    } else {
-      navigate(`/categories/${categoryId}?category=${encodeURIComponent(categoryName)}`);
     }
   };
 
@@ -145,21 +109,39 @@ useEffect(() => {
           </button>
         </div>
       </section>
-{ /* Services Section */}
-       <section id="services" className="py-20 bg-gray-50">
+
+     {/* Services Section */}
+<section id="services" className="py-20 bg-gray-50">
   <div className="max-w-7xl mx-auto px-4">
-    <h2 className="text-3xl font-bold mb-10 text-center">Our <span className="text-blue-600">Services</span></h2>
+    <h2 className="text-3xl font-bold mb-10 text-center">
+      Our <span className="text-blue-600">Services</span>
+    </h2>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {(showAllServices ? services : services.slice(0, 3)).map((s, i) => (
         <div key={i} className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden border">
-          <img src={s.image} alt={s.title} className="w-full h-40 object-cover" />
+          {s.image ? (
+            <img
+              src={s.image}
+              alt={s.title}
+              className="w-full h-40 object-cover"
+            />
+          ) : (
+            <div className="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-500">
+              No Image
+            </div>
+          )}
+
           <div className="p-4">
             <h3 className="font-bold text-lg mb-1">{s.title}</h3>
             <p className="text-gray-600 mb-2">{s.description}</p>
-            <p className="text-sm text-gray-500 mb-4">{s.workers} available workers</p>
+            <p className="text-sm text-gray-500 mb-4">
+              {s.workers} available workers
+            </p>
             <button
-              onClick={() => navigate(`/workers?category=${encodeURIComponent(s.title)}`)}
+              onClick={() =>
+                navigate(`/workers?category=${encodeURIComponent(s.title)}`)
+              }
               className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2"
             >
               View Workers
@@ -169,7 +151,7 @@ useEffect(() => {
       ))}
     </div>
 
-    {services.length > 6 && (
+    {services.length > 3 && (
       <div className="text-center mt-6">
         <button
           onClick={() => setShowAllServices(!showAllServices)}
@@ -181,6 +163,7 @@ useEffect(() => {
     )}
   </div>
 </section>
+
       {/* How It Works Section */}
       <section className="py-20 bg-white" id="how-it-works">
         <div className="max-w-7xl mx-auto px-6">
@@ -347,21 +330,27 @@ useEffect(() => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
-          <p className="text-lg mb-6 max-w-2xl mx-auto">
-            Join thousands of satisfied homeowners today
-          </p>
-          <button
-            onClick={() => handleNavigation('/categories')}
-            className="bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors shadow-md"
-          >
-            Browse Services
-          </button>
-        </div>
-      </section>
+    {/* CTA Section */}
+<section className="py-16 bg-blue-600 text-white">
+  <div className="max-w-4xl mx-auto px-6 text-center">
+    <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
+    <p className="text-lg mb-6 max-w-2xl mx-auto">
+      Join thousands of satisfied homeowners today
+    </p>
+    <button
+      onClick={() => {
+        const servicesSection = document.getElementById('services');
+        if (servicesSection) {
+          servicesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }}
+      className="bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors shadow-md"
+    >
+      Browse Services
+    </button>
+  </div>
+</section>
+
 
       <Footer />
 

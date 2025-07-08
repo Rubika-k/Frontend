@@ -24,7 +24,7 @@ export default function AdminMessages() {
   const fetchMessages = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get('admin/messages');
+      const res = await axios.get('/contact/messages'); // ✅ ensure correct path
       setMessages(res.data || []);
     } catch (err) {
       console.error('Error fetching messages:', err);
@@ -37,16 +37,14 @@ export default function AdminMessages() {
   const filterMessages = () => {
     let filtered = messages;
 
-    // Filter by status
     if (statusFilter !== 'all') {
       filtered = filtered.filter(msg => msg.status === statusFilter);
     }
 
-    // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(msg => 
-        msg.name.toLowerCase().includes(term) || 
+      filtered = filtered.filter(msg =>
+        msg.name.toLowerCase().includes(term) ||
         msg.email.toLowerCase().includes(term) ||
         msg.message.toLowerCase().includes(term)
       );
@@ -55,36 +53,41 @@ export default function AdminMessages() {
     setFilteredMessages(filtered);
   };
 
-  const handleReplySubmit = async (messageId) => {
-    if (!replyContent.trim()) {
-      toast.error('Please enter a reply');
-      return;
-    }
+ const handleReplySubmit = async (messageId) => {
+  if (!replyContent.trim()) {
+    toast.error('Please enter a reply');
+    return;
+  }
 
-    try {
-      await axios.patch(`/messages/${messageId}/reply`, { reply: replyContent });
-      toast.success('Reply sent successfully');
-      setSelectedMessage(null);
-      setReplyContent('');
-      fetchMessages(); // Refresh messages
-    } catch (err) {
-      console.error('Error replying to message:', err);
-      toast.error('Failed to send reply');
-    }
-  };
+  try {
+    console.log('Replying to:', messageId);
+    await axios.patch(`/api/messages/${messageId}/reply`, { reply: replyContent });
+    toast.success('Reply sent!');
+    setSelectedMessage(null);
+    setReplyContent('');
+    fetchMessages();
+  } catch (err) {
+    console.error('Error replying to message:', err);
+    toast.error('Failed to send reply.');
+  }
+};
+
+
+
 
   const handleDeleteMessage = async (messageId) => {
-    if (!window.confirm('Are you sure you want to delete this message?')) return;
+  if (!window.confirm('Are you sure?')) return;
 
-    try {
-      await axios.delete(`/admin/messages/${messageId}`);
-      toast.success('Message deleted');
-      fetchMessages(); // Refresh messages
-    } catch (err) {
-      console.error('Error deleting message:', err);
-      toast.error('Failed to delete message');
-    }
-  };
+  try {
+    await axios.delete(`/admin/messages/${messageId}`);
+    toast.success('Message deleted!');
+    fetchMessages();
+  } catch (err) {
+    console.error('Error deleting message:', err);
+    toast.error('Failed to delete message.');
+  }
+};
+
 
   const handleMarkAsReplied = async (messageId) => {
     try {
@@ -99,7 +102,6 @@ export default function AdminMessages() {
 
   return (
     <div className="p-6">
-
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Contact Messages</h2>
         <div className="flex items-center space-x-4">
@@ -136,8 +138,8 @@ export default function AdminMessages() {
       ) : (
         <div className="space-y-4">
           {filteredMessages.map((msg) => (
-            <div 
-              key={msg._id} 
+            <div
+              key={msg._id}
               className={`border rounded-lg shadow-sm overflow-hidden ${
                 msg.status === 'new' ? 'border-l-4 border-l-blue-500' : ''
               }`}
@@ -146,7 +148,7 @@ export default function AdminMessages() {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-bold text-lg">
-                      {msg.name} 
+                      {msg.name}
                       <span className="text-sm font-normal text-gray-500 ml-2">{msg.email}</span>
                     </h3>
                     <p className="text-gray-700 mt-2">{msg.message}</p>
@@ -155,21 +157,21 @@ export default function AdminMessages() {
                     </p>
                   </div>
                   <div className="flex space-x-2">
-                    <button 
+                    <button
                       onClick={() => setSelectedMessage(selectedMessage?._id === msg._id ? null : msg)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
                       title="Reply"
                     >
                       <FaReply />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleMarkAsReplied(msg._id)}
                       className="p-2 text-green-600 hover:bg-green-50 rounded-full"
                       title="Mark as replied"
                     >
                       <FaCheck />
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleDeleteMessage(msg._id)}
                       className="p-2 text-red-600 hover:bg-red-50 rounded-full"
                       title="Delete"
@@ -184,7 +186,7 @@ export default function AdminMessages() {
                     <div className="flex justify-between items-center">
                       <h4 className="font-semibold text-blue-800">Your Reply</h4>
                       <span className="text-xs text-blue-600">
-                        {new Date(msg.repliedAt).toLocaleString()}
+                        {msg.repliedAt ? new Date(msg.repliedAt).toLocaleString() : ''}
                       </span>
                     </div>
                     <p className="text-blue-700 mt-1">{msg.reply}</p>
