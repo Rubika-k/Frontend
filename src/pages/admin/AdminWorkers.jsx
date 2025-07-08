@@ -30,9 +30,24 @@ export default function AdminWorkers() {
   const [success, setSuccess] = useState(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [workerToDelete, setWorkerToDelete] = useState(null);
-
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    total: 0
+  });
   const defaultProfilePic = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
+  // // ✅ Adjust the API endpoint to match your backend routing
+  //     const response =  axios.get('/admin/workers', {
+  //       params: {
+  //         page: pagination.page,
+  //         limit: pagination.limit
+  //       },
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('token')}`
+  //       }
+  //     });
+  
   // Fetch all categories
   useEffect(() => {
     const fetchCategories = async () => {

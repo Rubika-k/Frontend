@@ -1,11 +1,11 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import electricianImg from "../assets/electrician.jpg";
-import plumberImg from "../assets/Plumber.jpg";
-import hvacImg from "../assets/HVAC.jpg";
-import carpenterImg from "../assets/carpenter.jpeg";
-import painterImg from "../assets/painter.jpeg";
-import cleanerImg from "../assets/cleaner.jpeg";
+// import electricianImg from "../assets/electrician.jpg";
+// import plumberImg from "../assets/Plumber.jpg";
+// import hvacImg from "../assets/HVAC.jpg";
+// import carpenterImg from "../assets/carpenter.jpeg";
+// import painterImg from "../assets/painter.jpeg";
+// import cleanerImg from "../assets/cleaner.jpeg";
 import bgImg from "../assets/backpic.jpg";
 import { useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar, FaMapMarkerAlt, FaCheckCircle, FaArrowRight, FaQuoteLeft, FaChevronDown } from "react-icons/fa";
@@ -30,62 +30,17 @@ const HomePage = () => {
   
  
   // Services data with actual worker counts
-  const services = [
-    {
-      title: 'Electrical Services',
-      description: 'Fixing wiring, fans, lighting and more.',
-      image: electricianImg,
-      key: 'electrical',
-      workers: 42
-    },
-    {
-      title: 'Plumbing Services',
-      description: 'Leaks, pipelines, and drainage solutions.',
-      image: plumberImg,
-      key: 'plumbing',
-      workers: 38
-    },
-    {
-      title: 'HVAC Services',
-      description: 'AC installation, repairs, and maintenance.',
-      image: hvacImg,
-      key: 'hvac',
-      workers: 25
-    },
-    {
-      title: 'Carpentry Services',
-      description: 'Furniture repair and custom woodwork.',
-      image: carpenterImg,
-      key: 'carpentry',
-      workers: 31
-    },
-    {
-      title: 'Painting Services',
-      description: 'Interior and exterior painting solutions.',
-      image: painterImg,
-      key: 'painting',
-      workers: 29
-    },
-    {
-      title: 'Cleaning Services',
-      description: 'Deep cleaning and maintenance services.',
-      image: cleanerImg,
-      key: 'cleaning',
-      workers: 47
-    }
-  ];
-
+const [services, setServices] = useState([]);
 useEffect(() => {
-  axios.get("/categories").then(res => {
-    const updated = services.map(service => ({
-      ...service,
-      workers: res.data.find(c => c.key === service.key)?.workers || 0
-    }));
-    setServices(updated);
-  });
+  axios.get("/categories")
+    .then(res => {
+      console.log("Fetched services:", res.data);
+      setServices(res.data);
+    })
+    .catch(err => {
+      console.error("Failed to load services:", err);
+    });
 }, []);
-
-
 
   const handleNavigation = (path) => {
     const token = localStorage.getItem('token');
@@ -94,15 +49,6 @@ useEffect(() => {
     } else {
       navigate(path);
     }
-  };
-
-  const handleBookNow = (worker) => {
-    navigate(`/booking?workerId=${worker.id}&category=${worker.category}`, {
-      state: {
-        workerName: worker.name,
-        workerCategory: worker.category
-      }
-    });
   };
 
   const handleContactSubmit = async (e) => {
@@ -205,7 +151,7 @@ useEffect(() => {
     <h2 className="text-3xl font-bold mb-10 text-center">Our <span className="text-blue-600">Services</span></h2>
 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {(showAllServices ? services : services.slice(0, 6)).map((s, i) => (
+      {(showAllServices ? services : services.slice(0, 3)).map((s, i) => (
         <div key={i} className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden border">
           <img src={s.image} alt={s.title} className="w-full h-40 object-cover" />
           <div className="p-4">
