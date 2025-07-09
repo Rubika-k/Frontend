@@ -66,44 +66,6 @@ export default function AdminWorkers() {
     fetchCategories();
   }, []);
 
-  // Fetch workers with enhanced error handling
-  // useEffect(() => {
-  //   const fetchWorkers = async () => {
-  //     try {
-  //       setLoading(prev => ({...prev, workers: true}));
-  //       setError(null);
-        
-  //       const endpoint = selectedCategory 
-  //         // ? `/workers/category/${encodeURIComponent(selectedCategory)}`
-  //         // : '/workers';
-
-  //           ? `/workers/category?category=${encodeURIComponent(selectedCategory)}`
-  // : '/workers/admin'; // 
-        
-  //       const res = await axios.get(endpoint);
-        
-  //       // Handle different API response structures
-  //       const receivedData = res.data?.data || res.data?.workers || res.data;
-  //       if (Array.isArray(receivedData)) {
-  //         setWorkers(receivedData);
-  //       } else {
-  //         console.warn("Unexpected workers data format:", receivedData);
-  //         setWorkers([]);
-  //       }
-  //     } catch (err) {
-  //       const errorMsg = err.response?.data?.message || 
-  //                      err.message || 
-  //                      "Failed to load workers";
-  //       setError(errorMsg);
-  //       console.error("Fetch Workers Error:", err);
-  //       setWorkers([]);
-  //     } finally {
-  //       setLoading(prev => ({...prev, workers: false}));
-  //     }
-  //   };
-  //   fetchWorkers();
-  // }, [selectedCategory]);
-
 useEffect(() => {
   const fetchWorkers = async () => {
     try {
@@ -141,32 +103,62 @@ useEffect(() => {
 }, [selectedCategory]);
 
 
+const handleAddWorker = async (e) => {
+  e.preventDefault();
+  try {
+    setLoading(prev => ({ ...prev, form: true }));
+    setError(null);
+    setSuccess(null);
 
-  const handleAddWorker = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(prev => ({...prev, form: true}));
-      setError(null);
-      setSuccess(null);
+    // ✅ Lookup the category name by ID
+    const selectedCategoryObj = categories.find(cat => cat._id === formData.category);
+    const categoryName = selectedCategoryObj ? selectedCategoryObj.name : formData.category;
+
+    const res = await axios.post("/workers", {
+      ...formData,
+      category: categoryName, // ✅ Save the name instead of ID
+      role: "worker",
+    });
+
+    setWorkers([res.data?.data || res.data, ...workers]);
+    setSuccess("Worker added successfully!");
+    resetForm();
+  } catch (error) {
+    const errorMsg = error.response?.data?.message ||
+      error.message ||
+      "Failed to add worker";
+    setError(errorMsg);
+    console.error("Add Worker Error:", error);
+  } finally {
+    setLoading(prev => ({ ...prev, form: false }));
+  }
+};
+
+  // const handleAddWorker = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     setLoading(prev => ({...prev, form: true}));
+  //     setError(null);
+  //     setSuccess(null);
       
-      const res = await axios.post("/workers", {
-        ...formData,
-        role: "worker",
-      });
+  //     const res = await axios.post("/workers", {
+  //       ...formData,
+  //       role: "worker",
+  //     });
       
-      setWorkers([res.data?.data || res.data, ...workers]);
-      setSuccess("Worker added successfully!");
-      resetForm();
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || 
-                      error.message || 
-                      "Failed to add worker";
-      setError(errorMsg);
-      console.error("Add Worker Error:", error);
-    } finally {
-      setLoading(prev => ({...prev, form: false}));
-    }
-  };
+  //     setWorkers([res.data?.data || res.data, ...workers]);
+  //     setSuccess("Worker added successfully!");
+  //     resetForm();
+  //   } catch (error) {
+  //     const errorMsg = error.response?.data?.message || 
+  //                     error.message || 
+  //                     "Failed to add worker";
+  //     setError(errorMsg);
+  //     console.error("Add Worker Error:", error);
+  //   } finally {
+  //     setLoading(prev => ({...prev, form: false}));
+  //   }
+  // };
 
   const resetForm = () => {
     setFormData({
@@ -212,29 +204,58 @@ useEffect(() => {
     });
     setEditModalOpen(true);
   };
+const saveUpdatedWorker = async () => {
+  try {
+    setLoading(prev => ({ ...prev, form: true }));
+    setError(null);
 
-  const saveUpdatedWorker = async () => {
-    try {
-      setLoading(prev => ({...prev, form: true}));
-      setError(null);
+    // ✅ Lookup the category name
+    const selectedCategoryObj = categories.find(cat => cat._id === editingWorker.category);
+    const categoryName = selectedCategoryObj ? selectedCategoryObj.name : editingWorker.category;
+
+    const res = await axios.put(`/workers/${editingWorker._id}`, {
+      ...editingWorker,
+      category: categoryName
+    });
+
+    setWorkers(workers.map(worker =>
+      worker._id === editingWorker._id ? (res.data?.data || res.data) : worker
+    ));
+    setSuccess("Worker updated successfully!");
+    setEditModalOpen(false);
+  } catch (error) {
+    const errorMsg = error.response?.data?.message ||
+      error.message ||
+      "Failed to update worker";
+    setError(errorMsg);
+    console.error("Update Worker Error:", error);
+  } finally {
+    setLoading(prev => ({ ...prev, form: false }));
+  }
+};
+
+  // const saveUpdatedWorker = async () => {
+  //   try {
+  //     setLoading(prev => ({...prev, form: true}));
+  //     setError(null);
       
-      const res = await axios.put(`/workers/${editingWorker._id}`, editingWorker);
+  //     const res = await axios.put(`/workers/${editingWorker._id}`, editingWorker);
       
-      setWorkers(workers.map(worker => 
-        worker._id === editingWorker._id ? (res.data?.data || res.data) : worker
-      ));
-      setSuccess("Worker updated successfully!");
-      setEditModalOpen(false);
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || 
-                      error.message || 
-                      "Failed to update worker";
-      setError(errorMsg);
-      console.error("Update Worker Error:", error);
-    } finally {
-      setLoading(prev => ({...prev, form: false}));
-    }
-  };
+  //     setWorkers(workers.map(worker => 
+  //       worker._id === editingWorker._id ? (res.data?.data || res.data) : worker
+  //     ));
+  //     setSuccess("Worker updated successfully!");
+  //     setEditModalOpen(false);
+  //   } catch (error) {
+  //     const errorMsg = error.response?.data?.message || 
+  //                     error.message || 
+  //                     "Failed to update worker";
+  //     setError(errorMsg);
+  //     console.error("Update Worker Error:", error);
+  //   } finally {
+  //     setLoading(prev => ({...prev, form: false}));
+  //   }
+  // };
 
   const filteredWorkers = workers.filter(worker => 
     worker?.fullName?.toLowerCase()?.includes(search?.toLowerCase() || "")

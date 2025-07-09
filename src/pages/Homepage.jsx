@@ -138,14 +138,12 @@ const HomePage = () => {
             <p className="text-sm text-gray-500 mb-4">
               {s.workers} available workers
             </p>
-            <button
-              onClick={() =>
-                navigate(`/workers?category=${encodeURIComponent(s.title)}`)
-              }
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2"
-            >
-              View Workers
-            </button>
+           <button
+  onClick={() => navigate(`/workers?category=${s._id}`)}
+>
+  View Workers
+</button>
+
           </div>
         </div>
       ))}

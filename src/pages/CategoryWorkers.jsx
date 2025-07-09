@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "../config/axiosConfig";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FiArrowLeft, FiAlertCircle, FiClock, FiUser, FiCheckCircle } from "react-icons/fi";
+import { FiArrowLeft, FiAlertCircle, FiClock, FiUser, FiCheckCircle ,FiCalendar  } from "react-icons/fi";
 
 export default function CategoryWorkers() {
   const location = useLocation();
@@ -14,48 +14,51 @@ export default function CategoryWorkers() {
 
   // Extract category from URL query parameters
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const cat = params.get("category");
-    setCategory(cat || "");
-  }, [location.search]);
+  const params = new URLSearchParams(location.search);
+  setCategory(params.get("category") || "");
+}, [location.search]);
+
 
   // Fetch workers based on category
-  useEffect(() => {
-    const fetchWorkers = async () => {
-      try {
-        if (!category) {
-          setWorkers([]);
-          setLoading(false);
-          return;
-        }
+  const fetchWorkers = async () => {
+  try {
+    if (!category) {
+      setWorkers([]);
+      setLoading(false);
+      return;
+    }
 
-        setLoading(true);
-        setError(null);
-        
-        const response = await axios.get(`/workers?category=${encodeURIComponent(category)}`);
-        
-        if (!Array.isArray(response.data)) {
-          throw new Error("Invalid data format received");
-        }
+    setLoading(true);
+    setError(null);
+// const response = await axios.get(`/workers?category=${encodeURIComponent(category)}`);
 
-        setWorkers(response.data);
-      } catch (err) {
-        console.error("Failed to fetch workers:", err);
-        setError(err.response?.data?.message || "Failed to load workers. Please try again.");
-        setWorkers([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const response = await axios.get(`/workers/category?category=${encodeURIComponent(category)}`);
 
-    fetchWorkers();
-  }, [category]);
+    if (!Array.isArray(response.data)) {
+      throw new Error("Invalid data format received");
+    }
+
+    setWorkers(response.data);
+  } catch (err) {
+    console.error("Failed to fetch workers:", err);
+    setError(err.response?.data?.message || "Failed to load workers. Please try again.");
+    setWorkers([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchWorkers();
+}, [category]);
+
+  
 
   // Filter workers based on search term
   const filteredWorkers = workers.filter(worker =>
-    worker.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    worker.skills?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  worker.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  worker.skills?.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+);
 
   if (loading) {
     return (
@@ -159,12 +162,14 @@ export default function CategoryWorkers() {
 
 // Worker Card Component
 function WorkerCard({ worker, onBook }) {
+  const isAvailable = worker.isAvailable; 
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
       <div className="relative h-48 bg-gray-100">
         {worker.profilePicture ? (
-          <img 
-            src={worker.profilePicture} 
+          <img
+            src={worker.profilePicture}
             alt={worker.fullName}
             className="w-full h-full object-cover"
           />
@@ -175,50 +180,71 @@ function WorkerCard({ worker, onBook }) {
             </span>
           </div>
         )}
-        {worker.available && (
+
+        {isAvailable && (
           <div className="absolute top-2 right-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full flex items-center">
             <FiCheckCircle className="mr-1" /> Available
           </div>
         )}
       </div>
-      
+
       <div className="p-4">
+        {/* Name & Category */}
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-bold text-gray-900">{worker.fullName}</h3>
           <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
-            {worker.category}
+            {worker.category?.name || worker.category || "No Category"}
           </span>
         </div>
-        
-        <div className="flex items-center text-gray-500 text-sm mb-3">
+
+        {/* Experience */}
+        <div className="flex items-center text-gray-500 text-sm mb-2">
           <FiClock className="mr-1" />
           {worker.experience || "0"} years experience
         </div>
-        
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+
+        {/* Description */}
+        <p className="text-gray-600 text-sm mb-2 line-clamp-2">
           {worker.bio || "No description available"}
         </p>
-        
-        <div className="flex flex-wrap gap-2 mb-4">
-          {worker.skills?.slice(0, 3).map((skill, i) => (
-            <span key={i} className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">
-              {skill}
-            </span>
-          ))}
-        </div>
-        
+
+        {/* Next Available Time if NOT available */}
+        {!isAvailable && worker.nextAvailableTime && (
+          <div className="flex items-center text-gray-500 text-xs mb-2">
+            <FiCalendar className="mr-1" />
+            Next available:{" "}
+            {new Date(worker.nextAvailableTime).toLocaleString()}
+          </div>
+        )}
+
+        {/* Skills */}
+        {worker.skills?.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {worker.skills.slice(0, 3).map((skill, i) => (
+              <span
+                key={i}
+                className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Book button */}
         <button
           onClick={onBook}
-          disabled={!worker.available}
+          disabled={!isAvailable}
           className={`w-full py-2 rounded-lg font-medium transition ${
-            worker.available
+            isAvailable
               ? "bg-blue-600 text-white hover:bg-blue-700"
               : "bg-gray-200 text-gray-500 cursor-not-allowed"
           }`}
         >
-          {worker.available ? "Book Now" : "Not Available"}
+          {isAvailable ? "Book Now" : "Not Available"}
         </button>
       </div>
     </div>
   );
 }
+

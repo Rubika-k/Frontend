@@ -58,10 +58,9 @@ export default function AdminMessages() {
     toast.error('Please enter a reply');
     return;
   }
-
   try {
     console.log('Replying to:', messageId);
-    await axios.patch(`/api/messages/${messageId}/reply`, { reply: replyContent });
+    await axios.patch(`contact/messages/${messageId}/reply`, { reply: replyContent });
     toast.success('Reply sent!');
     setSelectedMessage(null);
     setReplyContent('');
@@ -71,15 +70,11 @@ export default function AdminMessages() {
     toast.error('Failed to send reply.');
   }
 };
-
-
-
-
   const handleDeleteMessage = async (messageId) => {
   if (!window.confirm('Are you sure?')) return;
 
   try {
-    await axios.delete(`/admin/messages/${messageId}`);
+    await axios.delete(`contact/admin/messages/${messageId}`);
     toast.success('Message deleted!');
     fetchMessages();
   } catch (err) {
@@ -91,7 +86,7 @@ export default function AdminMessages() {
 
   const handleMarkAsReplied = async (messageId) => {
     try {
-      await axios.patch(`/admin/messages/${messageId}/status`, { status: 'replied' });
+      await axios.patch(`contacts/admin/messages/${messageId}/status`, { status: 'replied' });
       toast.success('Marked as replied');
       fetchMessages();
     } catch (err) {

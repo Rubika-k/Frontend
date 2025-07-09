@@ -7,8 +7,7 @@ export default function AdminServices() {
     name: '',
     icon: '',
     description: '',
-    image: '',
-    workers: 0
+    image: ''
   });
   const [popup, setPopup] = useState({ show: false, message: '', type: '' });
   const adminToken = localStorage.getItem('token');
@@ -42,8 +41,7 @@ export default function AdminServices() {
       name: '',
       icon: '',
       description: '',
-      image: '',
-      workers: 0
+      image: ''
     });
     fetchCategories();
     showPopup('Service category added successfully!', 'success');
