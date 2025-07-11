@@ -37,7 +37,7 @@ function Navbar() {
               {[
                 { label: "Services", href: "#services" },
                 { label: "How It Works", href: "#how-it-works" },
-                { label: "Professionals", href: "#professionals" },
+                // { label: "Professionals", href: "#professionals" },
                 // { label: "Testimonials", href: "#testimonials" },
                 { label: "Contact", href: "#contact" },
               ].map((item) => (

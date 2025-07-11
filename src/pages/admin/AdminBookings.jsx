@@ -80,6 +80,9 @@ export default function AdminBookings() {
                       Service
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">
+                      Worker
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">
                       Date & Time
                     </th>
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">
@@ -108,6 +111,10 @@ export default function AdminBookings() {
                         <div className="text-sm font-medium text-gray-900">{b.workTitle}</div>
                         <div className="text-sm text-gray-500">{b.category || 'General'}</div>
                       </td>
+                     <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{b.workerName}</div>
+                        <div className="text-sm text-gray-500">{b.workerCategory || 'General'}</div>
+                     </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{new Date(b.preferredDate).toLocaleDateString()}</div>
                         <div className="text-sm text-gray-500">{b.preferredTime}</div>

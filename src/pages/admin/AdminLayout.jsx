@@ -19,7 +19,7 @@ export default function AdminLayout() {
       try {
         const [usersRes, workersRes, bookingsRes, servicesRes] = await Promise.all([
           axios.get('admin/users/count'),
-          axios.get('admin/workers/count?status=active'),
+          axios.get('admin/workers/count?'),
           axios.get('admin/bookings/count?date=today'),
           axios.get('admin/services/count')
         ]);
@@ -88,7 +88,7 @@ export default function AdminLayout() {
               },
               { 
                 icon: <FaTools className="h-6 w-6 text-blue-600" />, 
-                label: "Active Workers", 
+                label: "Workers", 
                 value: stats.activeWorkers,
                 color: "bg-green-100"
               },
