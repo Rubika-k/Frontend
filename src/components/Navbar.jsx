@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaUserPlus, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -9,11 +10,12 @@ function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    toast.success("Logged out successfully!")
     navigate("/login");
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm hover:shadow-md transition-shadow duration-300 border-b border-gray-100">
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm hover:shadow-md transition-shadow duration-300 border-b border-gray-100 m-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -35,8 +37,10 @@ function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <div className="flex space-x-8">
               {[
+                { label: "Home", path: "/" },
                 { label: "Services", href: "#services" },
                 { label: "How It Works", href: "#how-it-works" },
+                { label: "About Us", href: "#about-us" },
                 // { label: "Professionals", href: "#professionals" },
                 // { label: "Testimonials", href: "#testimonials" },
                 { label: "Contact", href: "#contact" },
@@ -145,12 +149,12 @@ function Navbar() {
                   >
                     Profile
                   </button>
-                  {/* <button
+                  <button
                     onClick={handleLogout}
                     className="w-full px-4 py-2 rounded-md text-center text-red-600 border border-red-600 hover:bg-red-600 hover:text-white transition duration-150 ease-in-out"
                   >
                     Logout
-                  </button> */}
+                  </button>
                 </>
               ) : (
                 <>

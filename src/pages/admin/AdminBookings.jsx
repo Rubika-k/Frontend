@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../config/axiosConfig';
+import { toast } from 'react-toastify';
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -30,8 +31,10 @@ export default function AdminBookings() {
       { status },
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    alert("Status updated successfully!");
+    alert("Are sure to update the status to " + status + "?");
     fetchBookings(); // refresh bookings
+        toast.success(`Booking status updated to ${status}`)
+
   } catch (err) {
     console.error("❌ Failed to update status:", err.response?.data || err);
   }

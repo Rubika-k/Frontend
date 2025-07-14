@@ -1,118 +1,185 @@
 import React from "react";
-import { FaFacebook, FaTwitter, FaInstagram, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { 
+  FaFacebook, FaTwitter, FaInstagram, 
+  FaPhoneAlt, FaEnvelope, FaMapMarkerAlt,
+  FaArrowRight
+} from "react-icons/fa";
 
 const Footer = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-gray-800 text-gray-300 pt-16 pb-8 px-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 px-6">
+    <footer className="relative overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800 text-gray-300 pt-20 pb-12 px-4">
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center"></div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-4 gap-12 px-6"
+        >
           {/* About Us */}
-          <div className="space-y-4">
-            <h4 className="text-white font-bold text-lg tracking-wider border-b border-blue-600 pb-2 inline-block">
-              About Us
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h4 className="text-white font-bold text-xl tracking-wider pb-2 relative inline-block">
+              <span className="relative">
+                About Us
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
+              </span>
             </h4>
             <p className="text-gray-400 leading-relaxed">
               BreezeHome connects homeowners with trusted, local workers for all home service needs.
             </p>
-            <div className="flex gap-4 mt-2">
-              <a 
-                href="#" 
-                aria-label="Facebook" 
-                className="text-gray-400 hover:text-blue-500 transition-colors duration-300 transform hover:scale-110"
-              >
-                <FaFacebook className="w-5 h-5" />
-              </a>
-              <a 
-                href="#" 
-                aria-label="Twitter" 
-                className="text-gray-400 hover:text-blue-400 transition-colors duration-300 transform hover:scale-110"
-              >
-                <FaTwitter className="w-5 h-5" />
-              </a>
-              <a 
-                href="#" 
-                aria-label="Instagram" 
-                className="text-gray-400 hover:text-pink-500 transition-colors duration-300 transform hover:scale-110"
-              >
-                <FaInstagram className="w-5 h-5" />
-              </a>
+            <div className="flex gap-5">
+              {[
+                { icon: <FaFacebook className="w-5 h-5" />, color: "hover:text-blue-500" },
+                { icon: <FaTwitter className="w-5 h-5" />, color: "hover:text-blue-400" },
+                { icon: <FaInstagram className="w-5 h-5" />, color: "hover:text-pink-500" }
+              ].map((social, index) => (
+                <motion.a
+                  key={index}
+                  href="#"
+                  whileHover={{ y: -3 }}
+                  className={`text-gray-400 ${social.color} transition-colors duration-300`}
+                  aria-label={`Social media ${index}`}
+                >
+                  {social.icon}
+                </motion.a>
+              ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-white font-bold text-lg tracking-wider border-b border-blue-600 pb-2 inline-block">
-              Quick Links
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h4 className="text-white font-bold text-xl tracking-wider pb-2 relative inline-block">
+              <span className="relative">
+                Quick Links
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
+              </span>
             </h4>
-            <ul className="space-y-3">
-              {["How It Works", "Professionals", "Testimonials", "Contact"].map((item) => (
-                <li key={item}>
+            <ul className="space-y-4">
+              {["How It Works", "About", "Testimonials", "Contact"].map((item, index) => (
+                <motion.li 
+                  key={item}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <a 
                     href="#" 
                     className="text-gray-400 hover:text-blue-400 transition-colors duration-200 flex items-center group"
                   >
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    <FaArrowRight className="w-3 h-3 mr-3 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                     {item}
                   </a>
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Services */}
-          <div className="space-y-4">
-            <h4 className="text-white font-bold text-lg tracking-wider border-b border-blue-600 pb-2 inline-block">
-              Services
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h4 className="text-white font-bold text-xl tracking-wider pb-2 relative inline-block">
+              <span className="relative">
+                Our Services
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
+              </span>
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {["Electrical", "Plumbing", "HVAC", "Carpentry", "Cleaning"].map((service) => (
-                <li key={service}>
+                <motion.li 
+                  key={service}
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <a 
                     href="#" 
                     className="text-gray-400 hover:text-blue-400 transition-colors duration-200 flex items-center group"
                   >
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-2 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-3 transform group-hover:scale-125 transition-transform"></span>
                     {service}
                   </a>
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Contact Us */}
-          <div className="space-y-4">
-            <h4 id="contact" className="text-white font-bold text-lg tracking-wider border-b border-blue-600 pb-2 inline-block">
-              Contact Us
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h4 className="text-white font-bold text-xl tracking-wider pb-2 relative inline-block">
+              <span className="relative">
+                Contact Us
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-full"></span>
+              </span>
             </h4>
-            <div className="space-y-3 text-gray-400">
-              <div className="flex items-start">
-                <FaMapMarkerAlt className="flex-shrink-0 mt-1 mr-3 text-blue-400" />
+            <div className="space-y-4 text-gray-400">
+              <motion.div 
+                whileHover={{ x: 5 }}
+                className="flex items-start"
+              >
+                <FaMapMarkerAlt className="flex-shrink-0 mt-1 mr-4 text-blue-400" />
                 <p>Kanapathiyappulam,<br/>Kopay Center,<br />Kopay</p>
-              </div>
-              <div className="flex items-center">
-                <FaPhoneAlt className="flex-shrink-0 mr-3 text-blue-400" />
+              </motion.div>
+              <motion.div 
+                whileHover={{ x: 5 }}
+                className="flex items-center"
+              >
+                <FaPhoneAlt className="flex-shrink-0 mr-4 text-blue-400" />
                 <p>Phone: 077-4583973</p>
-              </div>
-              <div className="flex items-center">
-                <FaEnvelope className="flex-shrink-0 mr-3 text-blue-400" />
+              </motion.div>
+              <motion.div 
+                whileHover={{ x: 5 }}
+                className="flex items-center"
+              >
+                <FaEnvelope className="flex-shrink-0 mr-4 text-blue-400" />
                 <p>Email: BreezeHome@gmail.com</p>
-              </div>
+              </motion.div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Copyright */}
-        <div className="border-t border-gray-700 mt-12 pt-6 text-center">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-2 text-sm text-gray-500">
-            <span>© 2025 BreezeHome. All rights reserved.</span>
-            <span className="hidden md:inline">|</span>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          viewport={{ once: true }}
+          className="border-t border-gray-700 mt-16 pt-8 text-center"
+        >
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-sm text-gray-500">
+            <span>© {new Date().getFullYear()} BreezeHome. All rights reserved.</span>
+            <span className="hidden md:inline text-gray-600">|</span>
             <a 
               href="#" 
               className="hover:text-blue-400 transition-colors duration-200 hover:underline"
             >
               Privacy Policy
             </a>
-            <span className="hidden md:inline">|</span>
+            <span className="hidden md:inline text-gray-600">|</span>
             <a 
               href="#" 
               className="hover:text-blue-400 transition-colors duration-200 hover:underline"
@@ -120,7 +187,7 @@ const Footer = () => {
               Terms of Service
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

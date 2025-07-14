@@ -3,6 +3,7 @@ import axios from "@/config/axiosConfig";
 import { useNavigate } from 'react-router-dom';
 import side1 from '../../assets/side1.png';
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaMapMarkerAlt, FaArrowRight, FaHome } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -53,7 +54,7 @@ const Signup = () => {
       delete payload.confirmPassword;
 
       const res = await axios.post('http://localhost:5000/api/auth/signup', payload);
-      setMessage(res.data.message || 'Signup successful!');
+      toast.success(res.data.message || 'Signup successful!');
   
       setTimeout(() => {
         navigate('/login');

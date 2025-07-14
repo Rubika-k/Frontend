@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { FaUsers, FaTools, FaCalendarAlt, FaCog, FaShieldAlt } from 'react-icons/fa';
 import axios from '../../config/axiosConfig';
+import { toast } from 'react-toastify';
 
 export default function AdminLayout() {
   const tabs = ['users', 'workers', 'bookings', 'services' , 'messages'];
@@ -43,6 +44,7 @@ export default function AdminLayout() {
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     navigate("/login");
+    toast.success("Logged out successfully!");
   };
 
   return (
@@ -66,7 +68,7 @@ export default function AdminLayout() {
         </button>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Glassmorphism container */}
         <div className="rounded-3xl shadow-2xl space-y-6 bg-white/80 backdrop-blur-lg border border-white/20 overflow-hidden animate-pop">
           {/* Header with gradient */}

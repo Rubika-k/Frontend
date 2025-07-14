@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import side1 from '../../assets/side1.png';
 import { FaUserShield, FaLock, FaArrowRight, FaHome } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -25,12 +26,15 @@ const Login = () => {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('userId', res.data.userId);  
       if (res.data.role === 'admin') {
+        toast.success('Login successful! Redirecting to admin dashboard...');
         navigate('/admin');
+      
       } else {
+        toast.success('Login successful! Redirecting to customer dashboard...');
         navigate('/customer');
       }
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Login failed');
+      toast.error(err.response?.data?.message || 'Login failed');
     } finally {
       setIsLoading(false);
     }

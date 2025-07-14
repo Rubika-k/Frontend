@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../config/axiosConfig';
+import { toast } from 'react-toastify';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -73,6 +74,8 @@ export default function AdminUsers() {
     try {
       await axios.delete(`/users/${id}`);
       fetchUsers();
+            toast.success("User deleted successfully!")
+
     } catch (error) {
       console.error("Error deleting user:", error.response?.data || error.message);
       setError(error.response?.data?.message || "Failed to delete user.");
