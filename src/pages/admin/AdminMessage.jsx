@@ -53,23 +53,47 @@ export default function AdminMessages() {
     setFilteredMessages(filtered);
   };
 
- const handleReplySubmit = async (messageId) => {
+//  const handleReplySubmit = async (messageId) => {
+//   if (!replyContent.trim()) {
+//     toast.error('Please enter a reply');
+//     return;
+//   }
+//   try {
+//     console.log('Replying to:', messageId);
+//     await axios.patch(`/contact/reply/${messageId}`, { reply: replyContent });
+//     toast.success('Reply sent!');
+//     setSelectedMessage(null);
+//     setReplyContent('');
+//     fetchMessages();
+//   } catch (err) {
+//     console.error('Error replying to message:', err);
+//     toast.error('Failed to send reply.');
+//   }
+// };
+
+const handleReplySubmit = async (messageId) => {
   if (!replyContent.trim()) {
     toast.error('Please enter a reply');
     return;
   }
+
   try {
     console.log('Replying to:', messageId);
-    await axios.patch(`contact/messages/${messageId}/reply`, { reply: replyContent });
+
+    // 🔽 THIS IS THE LINE YOU'RE ASKING ABOUT
+    await axios.patch(`/contact/reply/${messageId}`, { reply: replyContent });
+
     toast.success('Reply sent!');
     setSelectedMessage(null);
     setReplyContent('');
-    fetchMessages();
+    fetchMessages(); // Refresh the list
   } catch (err) {
     console.error('Error replying to message:', err);
     toast.error('Failed to send reply.');
   }
 };
+
+
   const handleDeleteMessage = async (messageId) => {
   if (!window.confirm('Are you sure?')) return;
 

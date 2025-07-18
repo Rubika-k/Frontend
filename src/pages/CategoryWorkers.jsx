@@ -1,86 +1,10 @@
-// // src/pages/CategoryWorkers.jsx
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { useParams, Link, useNavigate } from 'react-router-dom';
-
-// const CategoryWorkers = () => {
-//   const { id } = useParams(); // category ID from URL
-//   const navigate = useNavigate();
-//   const [workers, setWorkers] = useState([]);
-//   const [categoryName, setCategoryName] = useState('');
-//   const [loading, setLoading] = useState(true);
-//   const [notFound, setNotFound] = useState(false);
-
-//   useEffect(() => {
-//     const fetchCategoryWorkers = async () => {
-//       try {
-//         setLoading(true);
-//         const res = await axios.get(`http://localhost:5000/api/workers/category?category=${id}`);
-//         setWorkers(res.data);
-//         if (res.data.length > 0) {
-//           setCategoryName(res.data[0].category.name);
-//         } else {
-//           setNotFound(true);
-//         }
-//       } catch (err) {
-//         console.error('Error fetching workers:', err.message);
-//         setNotFound(true);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchCategoryWorkers();
-//   }, [id]);
-
-//   const handleBooking = (workerId) => {
-// navigate('/booking', { state: { workerId } });
-//   };
-
-//   if (loading) return <p className="p-6 text-center text-lg">Loading...</p>;
-//   if (notFound) return <p className="p-6 text-center text-red-500 text-lg">No workers found for this category.</p>;
-
-//   return (
-//     <div className="p-6">
-//       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Workers in: {categoryName}</h2>
-//       <div className="text-center mb-6">
-//         <Link to="/categories" className="text-blue-600 underline hover:text-blue-800">
-//           ← Back to Categories
-//         </Link>
-//       </div>
-//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-//         {workers.map((worker) => (
-//           <div
-//             key={worker._id}
-//             className="bg-white p-6 rounded-2xl shadow-md border hover:shadow-lg transition-transform duration-200 transform hover:scale-105"
-//           >
-//             <h3 className="text-xl font-semibold mb-2 text-gray-700">{worker.name}</h3>
-//             <p className="text-gray-600"><strong>Email:</strong> {worker.email}</p>
-//             <p className="text-gray-600"><strong>Phone:</strong> {worker.phone}</p>
-//             <p className="text-gray-600"><strong>Location:</strong> {worker.address || "Not Provided"}</p>
-//             <p className="text-gray-600 mb-4"><strong>Category:</strong> {worker.category.name}</p>
-//             <button
-//               onClick={() => handleBooking(worker._id)}
-//               className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition"
-//             >
-//               Book Now
-//             </button>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CategoryWorkers;
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const CategoryWorkers = () => {
-  const { id } = useParams(); // category ID from URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [workers, setWorkers] = useState([]);
   const [categoryName, setCategoryName] = useState('');
@@ -92,9 +16,10 @@ const CategoryWorkers = () => {
       try {
         setLoading(true);
         const res = await axios.get(`http://localhost:5000/api/workers/category?category=${id}`);
-        setWorkers(res.data);
-        if (res.data.length > 0) {
-          setCategoryName(res.data[0].category.name);
+
+        if (res.data && res.data.length > 0) {
+          setWorkers(res.data);
+          setCategoryName(res.data[0].category?.name || '');
         } else {
           setNotFound(true);
         }
@@ -109,61 +34,88 @@ const CategoryWorkers = () => {
     fetchCategoryWorkers();
   }, [id]);
 
-  const handleBooking = (workerId) => {
-    navigate('/booking', { state: { workerId } });
+  const handleBooking = (worker) => {
+    navigate('/booking', {
+      state: {
+        workerId: worker._id,
+        worker: worker
+      }
+    });
   };
 
   if (loading) return <p className="p-6 text-center text-lg text-indigo-600 animate-pulse">Loading...</p>;
   if (notFound) return <p className="p-6 text-center text-red-500 text-lg font-semibold">No workers found for this category.</p>;
 
   return (
-    <Navbar>
-    <div className="p-8 bg-gradient-to-tr from-indigo-50 via-purple-100 to-pink-100 min-h-screen">
-      <h2 className="text-4xl font-extrabold mb-8 text-center text-purple-800 drop-shadow-lg animate-fadein">
-        Workers in: <span className="text-pink-600">{categoryName}</span>
-      </h2>
-      <div className="text-center mb-8">
-        <Link
-          to="/categories"
-          className="inline-block text-lg font-semibold text-pink-700 underline hover:text-pink-900 transition-colors duration-300"
-        >
-          ← Back to Categories
-        </Link>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {workers.map((worker) => (
-          <div
-            key={worker._id}
-            className="bg-white rounded-3xl shadow-lg border border-pink-200 hover:shadow-2xl transition-transform duration-300 transform hover:scale-105 hover:border-pink-400"
-          >
-            <div className="p-6 flex flex-col items-center">
-              <div className="w-24 h-24 mb-4 rounded-full overflow-hidden border-4 border-pink-300 shadow-md">
-                {/* Worker image placeholder */}
-                <img
-                  src={worker.photo || 'https://via.placeholder.com/96?text=Worker'}
-                  alt={worker.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <h3 className="text-2xl font-semibold mb-1 text-purple-700">{worker.name}</h3>
-              <p className="text-sm text-purple-500 mb-2 italic">Category: {worker.category.name}</p>
-              <div className="text-gray-700 w-full space-y-1 mb-6">
-                <p><strong>Email:</strong> {worker.email}</p>
-                <p><strong>Phone:</strong> {worker.phone}</p>
-                <p><strong>Location:</strong> {worker.address || "Not Provided"}</p>
-              </div>
-              <button
-                onClick={() => handleBooking(worker._id)}
-                className="w-full bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:from-pink-600 hover:via-purple-700 hover:to-indigo-700 text-white py-3 rounded-xl font-semibold shadow-lg transition transform hover:scale-105"
-              >
-                Book Now
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="min-h-screen flex flex-col bg-gradient-to-tr from-blue-50 to-blue-100">
+      <Navbar />
 
-      {/* Animations */}
+      <main className="flex-grow py-10 px-6">
+        <h2 className="text-4xl font-extrabold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-b from-blue-600 to-blue-800 drop-shadow-lg animate-fadein">
+          Workers in: <span className="text-blue-700">{categoryName}</span>
+        </h2>
+
+        <div className="text-center mb-6">
+          <Link
+            to="/categories"
+            className="inline-block text-base font-semibold text-blue-500 underline hover:text-blue-800 transition-colors"
+          >
+            ← Back to Categories
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {workers.map((worker) => (
+            <div
+              key={worker._id}
+              className="bg-white rounded-2xl shadow border border-blue-300 hover:shadow-lg transition-transform duration-300 transform hover:scale-105 hover:border-blue-400 flex flex-col"
+            >
+              <div className="p-4 flex flex-col items-center flex-grow">
+                <div className="w-20 h-20 mb-3 rounded-full overflow-hidden border-2 border-blue-200 shadow-sm">
+                  <img
+                    src={worker.profilePicture || 'https://via.placeholder.com/96?text=Worker'}
+                    alt={worker.fullName}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <h3 className="text-lg font-semibold mb-1 text-blue-700">{worker.fullName}</h3>
+                <p className="text-xs text-blue-600 mb-2 italic">Category: {worker.category?.name}</p>
+
+                <div className="text-gray-700 w-full space-y-1 mb-4 text-sm">
+                  <p className="flex items-start">
+                    <svg className="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <strong>Location:</strong>&nbsp;{worker.address || "Not provided"}
+                  </p>
+
+                  <p className="flex items-start">
+                    <svg className="w-4 h-4 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <strong>Available:</strong>&nbsp;{worker.nextAvailableTime ?
+                      new Date(worker.nextAvailableTime).toLocaleString() : 'Not specified'}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => handleBooking(worker)}
+                  className="w-full text-sm bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-800 text-white py-2 rounded-lg font-semibold shadow transition transform hover:scale-105"
+                >
+                  Book Now
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
+
+      <footer className="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-500">
+        &copy; {new Date().getFullYear()} BreezeHome. All rights reserved.
+      </footer>
+
       <style>{`
         @keyframes fadein {
           from { opacity: 0; transform: translateY(-20px); }
@@ -174,7 +126,6 @@ const CategoryWorkers = () => {
         }
       `}</style>
     </div>
-    </Navbar>
   );
 };
 

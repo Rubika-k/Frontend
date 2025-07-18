@@ -12,11 +12,11 @@ import AdminServices from './pages/admin/AdminServices';
 import AdminMessage from './pages/admin/AdminMessage';
 import Categories from './pages/Categories';
 import CategoryWorkers from './pages/CategoryWorkers';
-// import UserProfile from './pages/UserProfile';
 import React, { useState } from 'react';
 import CustomerProfile from './pages/Customer/Profile.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PaymentSuccess from './pages/Customer/PaymentSuccess.jsx'; // Import the PaymentSuccess component
 
 
 function App() {
@@ -40,13 +40,14 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/booking" element={<BookingForm />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} /> {/* Add the PaymentSuccess route */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/customer" element={<Customer />} />
             <Route path="/profile" element={<CustomerProfile />} /> 
           <Route path="/categories" element={<Categories />} />
           <Route path="/categories/:id" element={<CategoryWorkers />} />
-          {/* <Route path="/userprofile" element={<UserProfile />} /> */}
+          
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="users" element={<AdminUsers />} />
             <Route path="workers" element={<AdminWorkers />} />

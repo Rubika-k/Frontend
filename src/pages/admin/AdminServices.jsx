@@ -41,7 +41,8 @@ export default function AdminServices() {
       name: '',
       icon: '',
       description: '',
-      image: ''
+      image: '',
+     
     });
     fetchCategories();
     showPopup('Service category added successfully!', 'success');

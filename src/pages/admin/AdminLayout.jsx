@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { FaUsers, FaTools, FaCalendarAlt, FaCog, FaShieldAlt } from 'react-icons/fa';
+import { FaUsers, FaTools, FaCalendarAlt, FaCog } from 'react-icons/fa';
 import axios from '../../config/axiosConfig';
 import { toast } from 'react-toastify';
+import Navbar from '../../components/Navbar'; // ✅ Use your existing Navbar
 
 export default function AdminLayout() {
-  const tabs = ['users', 'workers', 'bookings', 'services' , 'messages'];
+  const tabs = ['users', 'workers', 'bookings', 'services', 'messages', 'payments'];
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalUsers: 0,
@@ -20,7 +21,7 @@ export default function AdminLayout() {
       try {
         const [usersRes, workersRes, bookingsRes, servicesRes] = await Promise.all([
           axios.get('admin/users/count'),
-          axios.get('admin/workers/count?'),
+          axios.get('admin/workers/count'),
           axios.get('admin/bookings/count?date=today'),
           axios.get('admin/services/count')
         ]);
@@ -43,69 +44,41 @@ export default function AdminLayout() {
 
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
-    navigate("/login");
     toast.success("Logged out successfully!");
+    navigate("/login");
   };
 
   return (
-    <div className="min-h-screen bg-blue-50 p-6">
-      {/* Admin Navbar */}
-      <nav className="bg-white shadow flex items-center justify-between px-6 py-3 mb-8 rounded-xl max-w-6xl mx-auto">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
- <div className="text-3xl font-bold flex items-center gap-1">
-              <span className="text-red-500 bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent">
-                 Breeze
-              </span>
-              <span className="text-blue-500 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-               Home
-              </span>
-            </div>   </div>
-        <button
-          className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      </nav>
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+      {/* ✅ Your existing Navbar */}
+      <Navbar />
 
-      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Glassmorphism container */}
-        <div className="rounded-3xl shadow-2xl space-y-6 bg-white/80 backdrop-blur-lg border border-white/20 overflow-hidden animate-pop">
-          {/* Header with gradient */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-400 px-8 py-6">
-            <h1 className="text-4xl font-bold text-white tracking-tight drop-shadow-lg animate-slidein">
-              Admin Dashboard
-            </h1>
-            <p className="text-blue-100 mt-1 font-medium">Manage your platform efficiently</p>
+      <main className="flex-grow max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="rounded-3xl shadow-2xl bg-white/80 backdrop-blur-lg border border-white/20 overflow-hidden animate-pop mt-8">
+          {/* ✅ Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-400 px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-4xl font-bold text-white tracking-tight drop-shadow-lg animate-slidein">
+                Admin Dashboard
+              </h1>
+              <p className="text-blue-100 mt-1 font-medium">Manage your platform efficiently</p>
+            </div>
+            {/* ✅ Logout button */}
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
           </div>
 
-          {/* Stats Cards */}
+          {/* ✅ Stats Cards */}
           <div className="px-8 pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { 
-                icon: <FaUsers className="h-6 w-6 text-blue-600" />, 
-                label: "Total Users", 
-                value: stats.totalUsers,
-                color: "bg-blue-100"
-              },
-              { 
-                icon: <FaTools className="h-6 w-6 text-blue-600" />, 
-                label: "Workers", 
-                value: stats.activeWorkers,
-                color: "bg-green-100"
-              },
-              { 
-                icon: <FaCalendarAlt className="h-6 w-6 text-blue-600" />, 
-                label: "Today's Bookings", 
-                value: stats.todaysBookings,
-                color: "bg-purple-100"
-              },
-              { 
-                icon: <FaCog className="h-6 w-6 text-blue-600" />, 
-                label: "Services Offered", 
-                value: stats.servicesOffered,
-                color: "bg-yellow-100"
-              }
+              { icon: <FaUsers className="h-6 w-6 text-blue-600" />, label: "Total Users", value: stats.totalUsers, color: "bg-blue-100" },
+              { icon: <FaTools className="h-6 w-6 text-blue-600" />, label: "Workers", value: stats.activeWorkers, color: "bg-green-100" },
+              { icon: <FaCalendarAlt className="h-6 w-6 text-blue-600" />, label: "Today's Bookings", value: stats.todaysBookings, color: "bg-purple-100" },
+              { icon: <FaCog className="h-6 w-6 text-blue-600" />, label: "Services Offered", value: stats.servicesOffered, color: "bg-yellow-100" }
             ].map((stat, index) => (
               <div 
                 key={index} 
@@ -128,7 +101,7 @@ export default function AdminLayout() {
             ))}
           </div>
 
-          {/* Enhanced tab navigation */}
+          {/* ✅ Tabs */}
           <nav className="flex gap-1 px-6 mt-4">
             {tabs.map(tab => (
               <NavLink
@@ -150,22 +123,25 @@ export default function AdminLayout() {
             ))}
           </nav>
 
-          {/* Content area */}
+          {/* ✅ Content Outlet */}
           <div className="px-8 pb-8 pt-6 bg-gradient-to-br from-white/90 to-white/70">
             <Outlet />
           </div>
         </div>
-      </div>
+      </main>
 
-      {/* Animations */}
+      {/* ✅ Simple Copyright Footer */}
+      <footer className="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-500 mt-8">
+        &copy; {new Date().getFullYear()} BreezeHome Admin. All rights reserved.
+      </footer>
+
+      {/* ✅ Animations */}
       <style>{`
-        .animate-fadein { animation: fadein 0.8s ease-out; }
-        @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-slidein { animation: slidein 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
-        @keyframes slidein { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .animate-pop { animation: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        .animate-slidein { animation: slidein 0.6s ease forwards; }
+        @keyframes slidein { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-pop { animation: pop 0.5s ease; }
         @keyframes pop { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .animate-underline { animation: underline 0.3s cubic-bezier(0.65, 0, 0.35, 1); }
+        .animate-underline { animation: underline 0.3s ease; }
         @keyframes underline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
       `}</style>
     </div>
