@@ -31,7 +31,7 @@ const Login = () => {
       
       } else {
         toast.success('Login successful! Redirecting to customer dashboard...');
-        navigate('/customer');
+        navigate('/');
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
@@ -132,9 +132,9 @@ const Login = () => {
             </button>
 
             <div className="flex items-center justify-between mt-4">
-              <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
+              {/* <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
                 Forgot password?
-              </a>
+              </a> */}
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
                 <a href="/signup" className="font-semibold text-blue-600 hover:underline">

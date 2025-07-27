@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import Navbar from '../../components/Navbar'; // ✅ Use your existing Navbar
 
 export default function AdminLayout() {
-  const tabs = ['users', 'workers', 'bookings', 'services', 'messages', 'payments'];
+  const tabs = ['users', 'workers', 'bookings', 'services', 'messages'];
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalUsers: 0,

@@ -136,8 +136,8 @@ export default function AdminUsers() {
               <h2 className="text-2xl font-bold text-white">User Management</h2>
               <p className="text-blue-100 mt-1 text-sm">Manage all registered users</p>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="relative">
+            <div className="flex items-center gap-4 mt-4 md:mt-0  bg-white rounded-lg shadow-sm p-3">
+              <div className="relative" >
                 <input
                   type="text"
                   placeholder="Search users..."
@@ -225,7 +225,6 @@ export default function AdminUsers() {
                       >
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
-                        <option value="moderator">Moderator</option>
                       </select>
                     </td>
                     <td className="p-3">

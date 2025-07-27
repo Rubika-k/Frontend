@@ -600,7 +600,7 @@ export default function AdminWorkers() {
       </div>
 
       {editModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        // <div className=" inset-0 bg-blue-50 border-blue-500 h-200 w-200 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b border-gray-200 px-6 py-4">
               <h3 className="text-xl font-semibold text-gray-900">Edit Worker</h3>
@@ -727,11 +727,11 @@ export default function AdminWorkers() {
               </button>
             </div>
           </div>
-        </div>
+        // </div>
       )}
 
       {deleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        // <div className=" inset-0 bg-blue-50 border-blue-500 h-200 w-200 bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
             <div className="flex justify-between items-center border-b border-gray-200 px-6 py-4">
               <h3 className="text-xl font-semibold text-red-600">Confirm Delete</h3>
@@ -767,7 +767,7 @@ export default function AdminWorkers() {
               </div>
             </div>
           </div>
-        </div>
+        // </div>
       )}
     </div>
   );

@@ -269,7 +269,7 @@ const BookingForm = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50 animate-fadein">
           <div className="bg-white p-8 rounded-xl shadow-2xl text-center max-w-md mx-4 animate-scalein">
             <FiCheckCircle className="text-5xl text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Booking Confirmed!</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">The request is currently pending administrative review.</h2>
             <p className="text-gray-600 mb-6">
               Your service request with {workerName} has been received.
             </p>
